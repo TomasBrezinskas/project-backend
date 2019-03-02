@@ -6,14 +6,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
+
 @Controller
 @SpringBootApplication
 public class AppBackendApplication {
 
-	@RequestMapping("/")
+	@RequestMapping("/hello")
 	@ResponseBody
-	String home() {
-		return "Hello World!";
+	public HashMap<String, String> returnHello() {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("hello", "world");
+		return map;
 	}
 
 	public static void main(String[] args) {
