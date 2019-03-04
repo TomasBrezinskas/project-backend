@@ -7,11 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 
 @Controller
-public class MainController {
-
-    public MainController() {
-
-    }
+public class BackendController {
 
     @RequestMapping("/hello")
     @ResponseBody
