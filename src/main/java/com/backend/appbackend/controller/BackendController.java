@@ -13,7 +13,7 @@ public class BackendController {
     @ResponseBody
     public HashMap<String, String> returnHello() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("hello", "world");
+        map.put("hello", "people");
         return map;
     }
 }
