@@ -19,7 +19,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job getJob(Long id) throws JobNotFoundException {
+    public Job getJob(String id) throws JobNotFoundException {
         Optional<Job> job = jobRepository.findById(id);
         if (job.isPresent()) {
             return job.get();
@@ -35,12 +35,12 @@ public class JobServiceImpl implements JobService {
     @Override
     public Job updateJob(Job job) throws JobNotFoundException {
         getJob(job.getId());
-        return this.jobRepository.save(job);
+        return jobRepository.save(job);
     }
 
     @Override
-    public void deleteJob(Long id) throws JobNotFoundException {
+    public void deleteJob(String id) throws JobNotFoundException {
         getJob(id);
-        this.jobRepository.deleteById(id);
+        jobRepository.deleteById(id);
     }
 }

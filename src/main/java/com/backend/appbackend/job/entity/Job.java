@@ -10,7 +10,7 @@ import java.util.List;
 public class Job {
 
     @Id
-    private Long id;
+    private String id;
     private String idea;
     private String organisation;
     private String city;
@@ -20,16 +20,16 @@ public class Job {
     private String website;
     private String phone;
     private String description;
-    private List<String> hashtags = new ArrayList<>();
+    private List<String> hashtags;
 
     public Job() {
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

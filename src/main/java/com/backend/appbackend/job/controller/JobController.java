@@ -23,9 +23,9 @@ public class JobController {
     }
 
     @GetMapping(value = "/jobs/{id}")
-    public Job getJob(@PathVariable Long id) {
+    public Job getJob(@PathVariable String id) {
         try {
-            return this.jobService.getJob(id);
+            return jobService.getJob(id);
         } catch (JobNotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
@@ -33,7 +33,7 @@ public class JobController {
 
     @PostMapping(value = "/job")
     public ResponseEntity<Object> insertJob(@RequestBody Job job) {
-        this.jobService.insertJob(job);
+        jobService.insertJob(job);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(job.getId()).toUri();
         return ResponseEntity.created(location).build();
@@ -42,7 +42,7 @@ public class JobController {
     @PutMapping(value = "/job")
     public ResponseEntity<Object> updateJob(@RequestBody Job job) {
         try {
-            this.jobService.updateJob(job);
+            jobService.updateJob(job);
             return ResponseEntity.noContent().build();
         } catch (JobNotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -50,9 +50,9 @@ public class JobController {
     }
 
     @DeleteMapping(value = "/jobs/{id}")
-    public void deleteJob(@PathVariable Long id) {
+    public void deleteJob(@PathVariable String id) {
         try {
-            this.jobService.deleteJob(id);
+            jobService.deleteJob(id);
         } catch (JobNotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
