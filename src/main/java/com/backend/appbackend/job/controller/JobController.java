@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 public class JobController {
@@ -58,4 +59,13 @@ public class JobController {
         }
     }
 
+    @RequestMapping(value = "/jobs/all")
+    public List<Job> fetchActiveSortedJobs() {
+        return jobService.getAndSortActiveJobs();
+    }
+
+    @RequestMapping(value = "/jobs/allnosort")
+    public  List<Job> fetchAllJobs() {
+        return jobService.getAllJobs();
+    }
 }

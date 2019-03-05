@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Document
@@ -11,6 +12,7 @@ public class Job {
 
     @Id
     private String id;
+    private String date;
     private String idea;
     private String organisation;
     private String city;
@@ -21,8 +23,15 @@ public class Job {
     private String phone;
     private String description;
     private List<String> hashtags;
-
     public Job() {
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getId() {
