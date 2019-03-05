@@ -53,8 +53,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<Job> getAndSortActiveJobs() {
-        List<Job> sortedJobsByDate = sortJobsByDate();
-        return filterActiveJobs(sortedJobsByDate);
+        return filterActiveJobs(sortJobsByDate());
     }
 
     public List<Job> getAllJobs() {
