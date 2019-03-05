@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -51,37 +54,34 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<Job> getAndSortActiveJobs() {
         List<Job> sortedJobsByDate = sortJobsByDate();
-        return sortActiveJobs(sortedJobsByDate);
+        return filterActiveJobs(sortedJobsByDate);
     }
 
-    private List<Job> sortActiveJobs(List<Job> sortedJobs) {
+    public List<Job> getAllJobs() {
+        return jobRepository.findAll();
+    }
+
+    private List<Job> filterActiveJobs(List<Job> sortedJobs) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         Date jobDate;
 
-        List<Job> sortedActiveJobs = new ArrayList<>();
-        for (int i = 0; i < sortedJobs.size(); i++){
-            System.out.println(sortedJobs.get(i).getDate());
+        List<Job> filteredActiveJobs = new ArrayList<>();
+        for (int i = 0; i < sortedJobs.size(); i++) {
             try {
                 jobDate = dateFormat.parse(sortedJobs.get(i).getDate());
-                System.out.println("lyginam" + date + " su " + jobDate);
-                if(jobDate.after(date) || jobDate.equals(date)){
-
-                    sortedActiveJobs.add(sortedJobs.get(i));
+                if (jobDate.after(date) || jobDate.equals(date)) {
+                    filteredActiveJobs.add(sortedJobs.get(i));
                 }
             } catch (ParseException ex) {
                 //#TODO
             }
         }
-        return sortedActiveJobs;
+        return filteredActiveJobs;
     }
 
     private List<Job> sortJobsByDate() {
         Sort sort = new Sort(Sort.Direction.ASC, "date");
         return jobRepository.findAll(sort);
-    }
-
-    public List<Job> getAllJobs() {
-        return jobRepository.findAll();
     }
 }

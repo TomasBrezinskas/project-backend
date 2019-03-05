@@ -65,7 +65,7 @@ public class JobController {
     }
 
     @RequestMapping(value = "/jobs/allnosort")
-    public  List<Job> fetchAllJobs() {
+    public List<Job> fetchAllJobs() {
         return jobService.getAllJobs();
     }
 }
