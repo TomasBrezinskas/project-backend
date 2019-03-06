@@ -2,24 +2,57 @@ package com.backend.appbackend.job.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Document
 public class Job {
 
     @Id
+    @GeneratedValue
     private String id;
+
+    @NotNull
     private String date;
+
+    @NotNull
+    @Size(max = 256, message = "Max length for field: \"Idea\" is 256")
     private String idea;
+
+    @NotNull
+    @Size(max = 128, message = "Max length for field: \"Organisation\" is 128")
     private String organisation;
+
+    @NotNull
+    @Size(max = 40, message = "Max length for field: \"City\" is 40")
     private String city;
+
+    @NotNull
+    @Size(max = 40, message = "Max length for field: \"Category\" is 40")
     private String category;
+
+    @Email
+    @Size(max = 50, message = "Max length for field: \"Email\" is 50")
     private String email;
+
+    @NotNull
+    @Size(max = 64, message = "Max length for field: \"Contact Name\" is 64")
     private String contactName;
+
+    @Size(max = 64, message = "Max length for field: \"Website\" is 64")
     private String website;
+
+    @NotNull
     private String phone;
+
+    @NotNull
+    @Size(max = 1024, message = "Max length for field: \"Description\" is 1024")
     private String description;
+
     private List<String> hashtags;
 
     public Job() {
