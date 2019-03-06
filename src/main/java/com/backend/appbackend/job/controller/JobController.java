@@ -61,11 +61,11 @@ public class JobController {
 
     @RequestMapping(value = "/jobs/all")
     public List<Job> fetchActiveSortedJobs() {
-        return jobService.getAndSortActiveJobs();
+        return jobService.fetchFutureJobsSortedByDate();
     }
 
     @RequestMapping(value = "/jobs/allnosort")
     public List<Job> fetchAllJobs() {
-        return jobService.getAllJobs();
+        return jobService.fetchAllJobs();
     }
 }

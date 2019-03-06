@@ -14,8 +14,7 @@ public interface JobService {
 
     void deleteJob(String id) throws JobNotFoundException;
 
-    List<Job> getAndSortActiveJobs();
+    List<Job> fetchFutureJobsSortedByDate();
 
-    //duomenu duombazeje testavimo patogumui funkcija nefiltruotiem jobam
-    List<Job> getAllJobs();
+    List<Job> fetchAllJobs();
 }

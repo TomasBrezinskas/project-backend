@@ -27,11 +27,9 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Job getJob(String id) throws JobNotFoundException {
+        //#TODO sake augustinas galima oneliner padaryt, paupgradinom i twoliner
         Optional<Job> job = jobRepository.findById(id);
-        if (job.isPresent()) {
-            return job.get();
-        }
-        throw new JobNotFoundException("Job not found in database");
+        return job.orElseThrow(() -> new JobNotFoundException("Job not found in database"));
     }
 
     @Override
@@ -52,15 +50,17 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> getAndSortActiveJobs() {
-        return filterActiveJobs(sortJobsByDate());
+    public List<Job> fetchFutureJobsSortedByDate() {
+        return filterActiveJobs();
     }
 
-    public List<Job> getAllJobs() {
+    @Override
+    public List<Job> fetchAllJobs() {
         return jobRepository.findAll();
     }
 
-    private List<Job> filterActiveJobs(List<Job> sortedJobs) {
+    private List<Job> filterActiveJobs() {
+        List<Job> sortedJobs = sortJobsByDate();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         Date jobDate;
