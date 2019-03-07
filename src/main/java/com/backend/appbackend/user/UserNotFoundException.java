@@ -1,4 +1,4 @@
-package com.backend.appbackend.user.exception;
+package com.backend.appbackend.user;
 
 public class UserNotFoundException extends Exception {
     public UserNotFoundException(String message) {

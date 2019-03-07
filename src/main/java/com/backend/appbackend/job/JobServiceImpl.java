@@ -1,8 +1,5 @@
-package com.backend.appbackend.job.service;
+package com.backend.appbackend.job;
 
-import com.backend.appbackend.job.entity.Job;
-import com.backend.appbackend.job.exception.JobNotFoundException;
-import com.backend.appbackend.job.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

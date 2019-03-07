@@ -1,4 +1,4 @@
-package com.backend.appbackend.user.entity;
+package com.backend.appbackend.user;
 
 import javax.persistence.Id;
 

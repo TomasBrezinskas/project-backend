@@ -1,4 +1,4 @@
-package com.backend.appbackend.job.entity;
+package com.backend.appbackend.job;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

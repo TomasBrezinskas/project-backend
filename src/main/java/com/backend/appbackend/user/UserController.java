@@ -1,9 +1,5 @@
-package com.backend.appbackend.user.controller;
+package com.backend.appbackend.user;
 
-import com.backend.appbackend.user.entity.User;
-import com.backend.appbackend.user.exception.UserNotFoundException;
-import com.backend.appbackend.user.repository.UserRepository;
-import com.backend.appbackend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +59,7 @@ public class UserController {
     public void signUpUser(@RequestBody User user) {
         try {
             userService.signUpUser(user);
-        } catch (UserNotFoundException ex){
+        } catch (UserNotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }

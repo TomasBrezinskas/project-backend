@@ -1,6 +1,5 @@
-package com.backend.appbackend.job.repository;
+package com.backend.appbackend.job;
 
-import com.backend.appbackend.job.entity.Job;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.backend.appbackend.userDetails;
 
-import com.backend.appbackend.user.entity.User;
-import com.backend.appbackend.user.repository.UserRepository;
+import com.backend.appbackend.user.User;
+import com.backend.appbackend.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

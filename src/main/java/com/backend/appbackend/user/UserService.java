@@ -1,7 +1,7 @@
-package com.backend.appbackend.user.service;
+package com.backend.appbackend.user;
 
-import com.backend.appbackend.user.entity.User;
-import com.backend.appbackend.user.exception.UserNotFoundException;
+import com.backend.appbackend.user.User;
+import com.backend.appbackend.user.UserNotFoundException;
 
 public interface UserService {
     User getUser(String id) throws UserNotFoundException;

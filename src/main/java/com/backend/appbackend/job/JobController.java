@@ -1,8 +1,8 @@
-package com.backend.appbackend.job.controller;
+package com.backend.appbackend.job;
 
-import com.backend.appbackend.job.entity.Job;
-import com.backend.appbackend.job.exception.JobNotFoundException;
-import com.backend.appbackend.job.service.JobService;
+import com.backend.appbackend.job.Job;
+import com.backend.appbackend.job.JobNotFoundException;
+import com.backend.appbackend.job.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
