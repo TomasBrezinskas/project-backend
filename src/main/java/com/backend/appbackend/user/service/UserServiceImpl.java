@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String id) throws UserNotFoundException {
-        //#TODO sake augustinas galima oneliner padaryt, paupgradinom i twoliner
         Optional<User> user = userRepository.findById(id);
         return user.orElseThrow(() -> new UserNotFoundException("User not found in database"));
     }
