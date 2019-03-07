@@ -1,8 +1,5 @@
-package com.backend.appbackend.client.controller;
+package com.backend.appbackend.client;
 
-import com.backend.appbackend.client.entity.Client;
-import com.backend.appbackend.client.exception.ClientNotFoundException;
-import com.backend.appbackend.client.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

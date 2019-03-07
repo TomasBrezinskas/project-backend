@@ -1,4 +1,4 @@
-package com.backend.appbackend.job.exception;
+package com.backend.appbackend.job;
 
 
 public class JobNotFoundException extends Exception {

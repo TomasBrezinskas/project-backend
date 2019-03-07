@@ -1,8 +1,5 @@
-package com.backend.appbackend.job.service;
+package com.backend.appbackend.job;
 
-import com.backend.appbackend.job.entity.Job;
-import com.backend.appbackend.job.exception.JobNotFoundException;
-import com.backend.appbackend.job.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -27,7 +24,6 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Job getJob(String id) throws JobNotFoundException {
-        //#TODO sake augustinas galima oneliner padaryt, paupgradinom i twoliner
         Optional<Job> job = jobRepository.findById(id);
         return job.orElseThrow(() -> new JobNotFoundException("Job not found in database"));
     }
