@@ -1,8 +1,8 @@
-package com.backend.appbackend.client.entity;
+package com.backend.appbackend.user.entity;
 
 import javax.persistence.Id;
 
-public class Client {
+public class User {
 
     @Id
     private String id;
@@ -20,7 +20,7 @@ public class Client {
         this.id = id;
     }
 
-    public Client() {
+    public User() {
     }
 
     public String getName() {
