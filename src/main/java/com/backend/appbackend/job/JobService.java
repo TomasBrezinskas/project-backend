@@ -1,7 +1,7 @@
-package com.backend.appbackend.job.service;
+package com.backend.appbackend.job;
 
-import com.backend.appbackend.job.entity.Job;
-import com.backend.appbackend.job.exception.JobNotFoundException;
+import com.backend.appbackend.job.Job;
+import com.backend.appbackend.job.JobNotFoundException;
 
 import java.util.List;
 

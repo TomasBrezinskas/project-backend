@@ -1,7 +1,4 @@
-package com.backend.appbackend.client.service;
-
-import com.backend.appbackend.client.entity.Client;
-import com.backend.appbackend.client.exception.ClientNotFoundException;
+package com.backend.appbackend.client;
 
 public interface ClientService {
     Client getClient(String id) throws ClientNotFoundException;

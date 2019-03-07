@@ -1,8 +1,5 @@
-package com.backend.appbackend.client.service;
+package com.backend.appbackend.client;
 
-import com.backend.appbackend.client.entity.Client;
-import com.backend.appbackend.client.exception.ClientNotFoundException;
-import com.backend.appbackend.client.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
