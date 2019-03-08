@@ -20,9 +20,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(String id) throws UserNotFoundException {
+    public User getUser(String id) throws UserException {
         Optional<User> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new UserNotFoundException("User not found in database"));
+        return user.orElseThrow(() -> new UserException("User not found in database"));
     }
 
     @Override
@@ -31,13 +31,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) throws UserNotFoundException {
+    public User updateUser(User user) throws UserException {
         getUser(user.getId());
         return userRepository.save(user);
     }
 
     @Override
-    public void deleteUser(String id) throws UserNotFoundException {
+    public void deleteUser(String id) throws UserException {
         getUser(id);
         userRepository.deleteById(id);
     }
@@ -48,7 +48,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User signUpUser(@Valid User user) throws UserNotFoundException {
+    public User signUpUser(@Valid User user) throws UserException {
+        if (userRepository.findUserByEmail(user.getEmail()) != null) {
+            throw new UserException("Email " + user.getEmail() + " already in the database.");
+        }
         user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
         return userRepository.save(user);
     }

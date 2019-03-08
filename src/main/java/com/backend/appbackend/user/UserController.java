@@ -23,7 +23,7 @@ public class UserController {
     public User getUser(@PathVariable String id) {
         try {
             return userService.getUser(id);
-        } catch (UserNotFoundException ex) {
+        } catch (UserException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
@@ -41,7 +41,7 @@ public class UserController {
         try {
             userService.updateUser(user);
             return ResponseEntity.noContent().build();
-        } catch (UserNotFoundException ex) {
+        } catch (UserException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
@@ -50,18 +50,18 @@ public class UserController {
     public void deleteUser(@PathVariable String id) {
         try {
             userService.deleteUser(id);
-        } catch (UserNotFoundException ex) {
+        } catch (UserException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     @PostMapping("/sign-up")
     public void signUpUser(@Valid @RequestBody User user) {
-        try {
-            userService.signUpUser(user);
-        } catch (UserNotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
-        }
+            try {
+                userService.signUpUser(user);
+            } catch (UserException ex) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+            }
     }
 
 }

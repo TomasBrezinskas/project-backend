@@ -1,21 +1,35 @@
 package com.backend.appbackend.user;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class User {
 
     @Id
     private String id;
+
     @NotBlank
+    @Size(max = 20, message = "Max length for field: \"Name\" is 20")
     private String name;
+
     @NotBlank
+    @Size(max = 32, message = "Max length for field: \"Surname\" is 32")
     private String surname;
-    @NotBlank
+
+    @Email
+    @Column(unique = true)
+    @Size(max = 32, message = "Max length for field: \"Email\" is 32")
     private String email;
+
     @NotBlank
+    @Size(max = 64, message = "Max length for field: \"Region\" is 64")
     private String region;
+
     @NotBlank
+    @Size(min = 7, message = "Min length for field: \"Password\" is 7")
     private String password;
 
     public String getId() {
