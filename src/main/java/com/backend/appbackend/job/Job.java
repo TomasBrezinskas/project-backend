@@ -13,7 +13,7 @@ public class Job {
     private String date;
     private String idea;
     private String organisation;
-    private String city;
+    private String region;
     private String category;
     private String email;
     private String contactName;
@@ -57,12 +57,12 @@ public class Job {
         this.organisation = organisation;
     }
 
-    public String getCity() {
-        return city;
+    public String getRegion() {
+        return region;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public String getCategory() {
