@@ -1,8 +1,5 @@
 package com.backend.appbackend.user;
 
-import com.backend.appbackend.user.User;
-import com.backend.appbackend.user.UserNotFoundException;
-
 public interface UserService {
     User getUser(String id) throws UserNotFoundException;
 

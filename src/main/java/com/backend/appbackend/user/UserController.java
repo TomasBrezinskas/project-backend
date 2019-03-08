@@ -3,14 +3,14 @@ package com.backend.appbackend.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
-@Controller
+@RestController
 public class UserController {
     private UserService userService;
 
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public void signUpUser(@RequestBody User user) {
+    public void signUpUser(@Valid @RequestBody User user) {
         try {
             userService.signUpUser(user);
         } catch (UserNotFoundException ex) {

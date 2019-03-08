@@ -1,9 +1,5 @@
 package com.backend.appbackend.user;
 
-import com.backend.appbackend.user.User;
-import com.backend.appbackend.user.UserNotFoundException;
-import com.backend.appbackend.user.UserRepository;
-import com.backend.appbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
