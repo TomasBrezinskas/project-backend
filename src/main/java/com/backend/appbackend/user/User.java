@@ -1,15 +1,21 @@
 package com.backend.appbackend.user;
 
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 public class User {
 
     @Id
     private String id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String surname;
+    @NotBlank
     private String email;
+    @NotBlank
     private String region;
+    @NotBlank
     private String password;
 
     public String getId() {

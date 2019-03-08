@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class JobController {
     }
 
     @PostMapping(value = "/job")
-    public ResponseEntity<Object> insertJob(@RequestBody Job job) {
+    public ResponseEntity<Object> insertJob(@Valid @RequestBody Job job) {
         jobService.insertJob(job);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(job.getId()).toUri();
