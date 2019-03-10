@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -24,9 +23,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Job getJob(String id) throws JobNotFoundException {
-        //#TODO sake augustinas galima oneliner padaryt, paupgradinom i twoliner
-        Optional<Job> job = jobRepository.findById(id);
-        return job.orElseThrow(() -> new JobNotFoundException("Job not found in database"));
+        return jobRepository.findById(id).orElseThrow(() -> new JobNotFoundException("Job not found in database"));
     }
 
     @Override
