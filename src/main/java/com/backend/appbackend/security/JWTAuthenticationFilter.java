@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static com.backend.appbackend.security.SecurityConstants.*;
+import static com.backend.appbackend.security.SecurityUtils.*;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 

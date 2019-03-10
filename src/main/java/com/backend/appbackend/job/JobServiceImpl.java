@@ -27,14 +27,14 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job insertJob(Job job) {
-        return this.jobRepository.save(job);
+    public void insertJob(Job job) {
+        jobRepository.save(job);
     }
 
     @Override
-    public Job updateJob(Job job) throws JobNotFoundException {
+    public void updateJob(Job job) throws JobNotFoundException {
         getJob(job.getId());
-        return jobRepository.save(job);
+        jobRepository.save(job);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class JobServiceImpl implements JobService {
                     filteredActiveJobs.add(sortedJobs.get(i));
                 }
             } catch (ParseException ex) {
-                //#TODO
+                ex.printStackTrace();
             }
         }
         return filteredActiveJobs;

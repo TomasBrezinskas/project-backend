@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.backend.appbackend.security.SecurityConstants.*;
+import static com.backend.appbackend.security.SecurityUtils.*;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 

@@ -14,8 +14,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import static com.backend.appbackend.security.SecurityConstants.SIGN_UP_URL;
-import static com.backend.appbackend.security.SecurityConstants.VIEW_JOBS_URL;
+import static com.backend.appbackend.security.SecurityUtils.SIGN_UP_URL;
+import static com.backend.appbackend.security.SecurityUtils.VIEW_JOBS_URL;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
