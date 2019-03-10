@@ -12,7 +12,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-    //private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -42,11 +41,6 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
     public User signUpUser(@Valid User user) throws UserException {
         if (userRepository.findUserByEmail(user.getEmail()) != null) {
@@ -54,6 +48,11 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }
