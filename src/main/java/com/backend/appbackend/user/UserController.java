@@ -57,11 +57,11 @@ public class UserController {
 
     @PostMapping("/sign-up")
     public void signUpUser(@Valid @RequestBody User user) {
-            try {
-                userService.signUpUser(user);
-            } catch (UserException ex) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
-            }
+        try {
+            userService.signUpUser(user);
+        } catch (UserException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
 }
