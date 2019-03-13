@@ -1,6 +1,5 @@
 package com.backend.appbackend.job;
 
-import com.backend.appbackend.user.User;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.GeneratedValue;
