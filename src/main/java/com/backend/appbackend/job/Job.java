@@ -1,5 +1,6 @@
 package com.backend.appbackend.job;
 
+import com.backend.appbackend.user.User;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.GeneratedValue;
@@ -54,7 +55,27 @@ public class Job {
     @Size(max = 512, message = "Max length for field: \"Description\" is 512")
     private String description;
 
+    private User organizator;
+
+    private User[] participants;
+
     private List<String> hashtags;
+
+    public User getOrganizator() {
+        return organizator;
+    }
+
+    public void setOrganizator(User organizator) {
+        this.organizator = organizator;
+    }
+
+    public User[] getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(User[] participants) {
+        this.participants = participants;
+    }
 
     public Job() {
     }
