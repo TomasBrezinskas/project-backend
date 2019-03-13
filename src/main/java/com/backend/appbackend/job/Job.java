@@ -55,11 +55,11 @@ public class Job {
     @Size(max = 512, message = "Max length for field: \"Description\" is 512")
     private String description;
 
+    private List<String> hashtags;
+
     private User organizator;
 
-    private User[] participants;
-
-    private List<String> hashtags;
+    private List<User> participants;
 
     public User getOrganizator() {
         return organizator;
@@ -69,15 +69,16 @@ public class Job {
         this.organizator = organizator;
     }
 
-    public User[] getParticipants() {
+    public Job() {
+
+    }
+
+    public List<User> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(User[] participants) {
-        this.participants = participants;
-    }
-
-    public Job() {
+    public void setParticipant(User participant) {
+        this.participants.add(participant);
     }
 
     public String getDate() {

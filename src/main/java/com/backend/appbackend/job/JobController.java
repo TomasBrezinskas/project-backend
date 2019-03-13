@@ -67,4 +67,5 @@ public class JobController {
     public List<Job> fetchAllJobs() {
         return jobService.fetchAllJobs();
     }
+
 }
