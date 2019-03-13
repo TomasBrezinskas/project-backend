@@ -36,7 +36,7 @@ public class Job {
     private String category;
 
     @Email
-    @Size(max = 32, message = "Max length for field: \"Email\" is 32")
+    @Size(max = 64, message = "Max length for field: \"Email\" is 64")
     private String email;
 
     @NotBlank

@@ -12,16 +12,16 @@ public class User {
     private String id;
 
     @NotBlank
-    @Size(max = 20, message = "Max length for field: \"Name\" is 20")
+    @Size(max = 32, message = "Max length for field: \"Name\" is 32")
     private String name;
 
     @NotBlank
-    @Size(max = 32, message = "Max length for field: \"Surname\" is 32")
+    @Size(max = 64, message = "Max length for field: \"Surname\" is 64")
     private String surname;
 
     @Email
     @Column(unique = true)
-    @Size(max = 32, message = "Max length for field: \"Email\" is 32")
+    @Size(max = 64, message = "Max length for field: \"Email\" is 64")
     private String email;
 
     @NotBlank
