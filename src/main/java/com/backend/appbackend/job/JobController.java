@@ -73,7 +73,7 @@ public class JobController {
     public void insertParticipant(@RequestHeader("Authorization") String token, @RequestBody String id) {
         try {
             jobService.insertParticipant(token, id);
-        } catch (TeamIsFullException | JobNotFoundException | UserException ex) {
+        } catch (TeamIsFullException | JobNotFoundException | UserException | ArrayIndexOutOfBoundsException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }

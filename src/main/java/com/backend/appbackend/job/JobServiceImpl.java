@@ -92,7 +92,7 @@ public class JobServiceImpl implements JobService {
 
     private DecodedJWT getDecodedToken(String token) {
         String[] tokenParts = token.split(" ");
-        token = tokenParts[2];
+        token = tokenParts[1];
         return JWT.decode(token);
     }
 

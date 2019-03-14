@@ -1,7 +1,6 @@
 package com.backend.appbackend.job;
 
 import com.backend.appbackend.user.User;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.GeneratedValue;
