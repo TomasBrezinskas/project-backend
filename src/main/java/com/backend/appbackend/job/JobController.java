@@ -74,7 +74,7 @@ public class JobController {
         try {
             jobService.insertParticipant(token, id);
         } catch (TeamIsFullException | JobNotFoundException | UserException | ArrayIndexOutOfBoundsException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.MULTI_STATUS, ex.getMessage());
         }
     }
 }

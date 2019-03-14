@@ -18,12 +18,14 @@ import java.util.List;
 @Service
 public class JobServiceImpl implements JobService {
 
-    @Autowired
-    JobRepository jobRepository;
+    private JobRepository jobRepository;
+    private UserService userService;
 
     @Autowired
-    UserService userService;
-
+    public JobServiceImpl(JobRepository jobRepository, UserService userService) {
+        this.jobRepository = jobRepository;
+        this.userService = userService;
+    }
 
     @Override
     public Job getJob(String id) throws JobNotFoundException {
@@ -67,13 +69,13 @@ public class JobServiceImpl implements JobService {
     public void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException {
         String email = getEmailFromToken(token);
         Job job = getJob(id);
-        if(job.getTeam().contains(userService.findUserByEmail(email))) {
+        if (job.getTeam().contains(userService.findUserByEmail(email))) {
             throw new UserException("User is already participating in this job.");
         }
-        if(job.getOrganizator().getEmail().equals(email)) {
+        if (job.getOrganizator().getEmail().equals(email)) {
             throw new UserException("User is organizing this job already.");
         }
-        if(job.getTeam().size() > 14) {
+        if (job.getTeam().size() >= 14) {
             throw new TeamIsFullException("Team is full");
         }
         job.getTeam().add(userService.findUserByEmail(email));
