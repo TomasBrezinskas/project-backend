@@ -2,7 +2,6 @@ package com.backend.appbackend.job;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.backend.appbackend.user.User;
 import com.backend.appbackend.user.UserException;
 import com.backend.appbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

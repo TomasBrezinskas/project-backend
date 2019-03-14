@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -61,8 +60,6 @@ public class Job {
 
     private User organizator;
 
-    @NotBlank
-    @UniqueElements
     private List<User> team;
 
     public void setTeam(List<User> team) {

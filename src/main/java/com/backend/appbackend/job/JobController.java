@@ -76,6 +76,5 @@ public class JobController {
         } catch (TeamIsFullException | JobNotFoundException | UserException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
-
     }
 }
