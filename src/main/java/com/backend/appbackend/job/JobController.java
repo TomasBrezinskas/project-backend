@@ -68,4 +68,9 @@ public class JobController {
         return jobService.fetchAllJobs();
     }
 
+    @RequestMapping(value = "/jobs/notactive")
+    public List<Job> fetchNotActiveJobs() {
+        return jobService.fetchNotActiveJobs();
+    }
+
 }

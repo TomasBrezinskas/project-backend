@@ -14,4 +14,6 @@ public interface JobService {
     List<Job> fetchFutureJobsSortedByDate();
 
     List<Job> fetchAllJobs();
+
+    List<Job> fetchNotActiveJobs();
 }
