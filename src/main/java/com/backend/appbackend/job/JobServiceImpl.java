@@ -31,7 +31,13 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void insertJob(Job job) {
+    public void insertJob(Job job, String token) {
+        String email = getEmailFromToken(token);
+        try {
+            job.setOrganizator(userService.findUserByEmail(email));
+        } catch (UserException ex) {
+            ex.printStackTrace();
+        }
         jobRepository.save(job);
     }
 
@@ -91,6 +97,7 @@ public class JobServiceImpl implements JobService {
     }
 
     private DecodedJWT getDecodedToken(String token) {
+        //#TODO jei bad request tai programa luzta tai not that great
         String[] tokenParts = token.split(" ");
         token = tokenParts[1];
         return JWT.decode(token);

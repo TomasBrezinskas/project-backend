@@ -33,8 +33,8 @@ public class JobController {
     }
 
     @PostMapping(value = "/job")
-    public ResponseEntity<Object> insertJob(@Valid @RequestBody Job job) {
-        jobService.insertJob(job);
+    public ResponseEntity<Object> insertJob(@RequestHeader("Authorization") String token, @Valid @RequestBody Job job) {
+        jobService.insertJob(job, token);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(job.getId()).toUri();
         return ResponseEntity.created(location).build();
