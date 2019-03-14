@@ -64,9 +64,15 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void insertParticipant(String token, String id) throws UserException, JobNotFoundException {
+    public void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException {
         String email = getEmailFromToken(token);
         Job job = getJob(id);
+        if(job.getTeam().contains(userService.findUserByEmail(email))) {
+            throw new UserException("User is already participating in this job.");
+        }
+        if(job.getTeam().size() > 14) {
+            throw new TeamIsFullException("Team is full");
+        }
         job.getTeam().add(userService.findUserByEmail(email));
         updateJob(job);
     }
