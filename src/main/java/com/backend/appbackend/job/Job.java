@@ -61,7 +61,15 @@ public class Job {
 
     private User organizator;
 
-    private List<User> participants;
+    private List<User> team;
+
+    public void setTeam(List<User> team) {
+        this.team = team;
+    }
+
+    public List<User> getTeam() {
+        return team;
+    }
 
     public User getOrganizator() {
         return organizator;
@@ -72,15 +80,6 @@ public class Job {
     }
 
     public Job() {
-
-    }
-
-    public List<User> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipant(User participant) {
-        this.participants.add(participant);
     }
 
     public String getDate() {

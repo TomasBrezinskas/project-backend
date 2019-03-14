@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JobRepository extends MongoRepository<Job, String> {
     Job findJobById(String id);
+    Job findJobByEmail(String email);
 }

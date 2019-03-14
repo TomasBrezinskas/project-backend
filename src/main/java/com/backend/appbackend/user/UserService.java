@@ -10,4 +10,6 @@ public interface UserService {
     void signUpUser(User user) throws UserException;
 
     void deleteUser(String id) throws UserException;
+
+    User findUserByEmail(String email) throws UserException;
 }

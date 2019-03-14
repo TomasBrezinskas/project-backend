@@ -1,5 +1,9 @@
 package com.backend.appbackend.job;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.backend.appbackend.user.UserException;
+import com.backend.appbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,10 +21,12 @@ import static com.backend.appbackend.job.JobUtils.DATE_FORMAT;
 public class JobServiceImpl implements JobService {
 
     private JobRepository jobRepository;
+    private UserService userService;
 
     @Autowired
-    public JobServiceImpl(JobRepository jobRepository) {
+    public JobServiceImpl(JobRepository jobRepository, UserService userService) {
         this.jobRepository = jobRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -29,14 +35,20 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void insertJob(Job job) {
+    public void insertJob(Job job, String token) {
+        String email = getEmailFromToken(token);
+        try {
+            job.setOrganizator(userService.findUserByEmail(email));
+        } catch (UserException ex) {
+            ex.printStackTrace();
+        }
         jobRepository.save(job);
     }
 
     @Override
-    public void updateJob(Job job) throws JobNotFoundException {
+    public Job updateJob(Job job) throws JobNotFoundException {
         getJob(job.getId());
-        jobRepository.save(job);
+        return jobRepository.save(job);
     }
 
     @Override
@@ -56,6 +68,23 @@ public class JobServiceImpl implements JobService {
     }
 
     public List<Job> fetchNotActiveJobs() {return getFilteredNotActiveJobs();}
+
+    @Override
+    public void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException {
+        String email = getEmailFromToken(token);
+        Job job = getJob(id);
+        if (job.getTeam().contains(userService.findUserByEmail(email))) {
+            throw new UserException("User is already participating in this job.");
+        }
+        if (job.getOrganizator().getEmail().equals(email)) {
+            throw new UserException("User is organizing this job already.");
+        }
+        if (job.getTeam().size() >= 14) {
+            throw new TeamIsFullException("Team is full");
+        }
+        job.getTeam().add(userService.findUserByEmail(email));
+        updateJob(job);
+    }
 
     private List<Job> filterActiveJobs() {
         List<Job> sortedJobs = sortJobsByDate();
@@ -98,5 +127,17 @@ public class JobServiceImpl implements JobService {
     private List<Job> sortJobsByDate() {
         Sort sort = new Sort(Sort.Direction.ASC, "date");
         return jobRepository.findAll(sort);
+    }
+
+    private DecodedJWT getDecodedToken(String token) {
+        //#TODO jei bad request tai programa luzta tai not that great
+        String[] tokenParts = token.split(" ");
+        token = tokenParts[1];
+        return JWT.decode(token);
+    }
+
+    private String getEmailFromToken(String token) {
+        DecodedJWT decodedToken = getDecodedToken(token);
+        return decodedToken.getClaim("sub").asString();
     }
 }

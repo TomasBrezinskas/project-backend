@@ -1,5 +1,6 @@
 package com.backend.appbackend.job;
 
+import com.backend.appbackend.user.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,8 @@ public class JobController {
     }
 
     @PostMapping(value = "/job")
-    public ResponseEntity<Object> insertJob(@Valid @RequestBody Job job) {
-        jobService.insertJob(job);
+    public ResponseEntity<Object> insertJob(@RequestHeader("Authorization") String token, @Valid @RequestBody Job job) {
+        jobService.insertJob(job, token);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(job.getId()).toUri();
         return ResponseEntity.created(location).build();
@@ -73,4 +74,12 @@ public class JobController {
         return jobService.fetchNotActiveJobs();
     }
 
+    @PostMapping(value = "/job/join")
+    public void insertParticipant(@RequestHeader("Authorization") String token, @RequestBody String id) {
+        try {
+            jobService.insertParticipant(token, id);
+        } catch (TeamIsFullException | JobNotFoundException | UserException | ArrayIndexOutOfBoundsException ex) {
+            throw new ResponseStatusException(HttpStatus.MULTI_STATUS, ex.getMessage());
+        }
+    }
 }
