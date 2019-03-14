@@ -70,6 +70,9 @@ public class JobServiceImpl implements JobService {
         if(job.getTeam().contains(userService.findUserByEmail(email))) {
             throw new UserException("User is already participating in this job.");
         }
+        if(job.getOrganizator().getEmail().equals(email)) {
+            throw new UserException("User is organizing this job already.");
+        }
         if(job.getTeam().size() > 14) {
             throw new TeamIsFullException("Team is full");
         }
