@@ -1,5 +1,6 @@
 package com.backend.appbackend.job;
 
+import com.backend.appbackend.user.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,4 +69,13 @@ public class JobController {
         return jobService.fetchAllJobs();
     }
 
+    @PostMapping(value = "/job/join")
+    public void insertParticipant(@RequestHeader("Authorization") String token, @RequestBody String id) {
+        try {
+            jobService.insertParticipant(token, id);
+        } catch (TeamIsFullException | JobNotFoundException | UserException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
+
+    }
 }

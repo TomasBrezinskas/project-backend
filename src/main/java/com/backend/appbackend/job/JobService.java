@@ -1,5 +1,7 @@
 package com.backend.appbackend.job;
 
+import com.backend.appbackend.user.UserException;
+
 import java.util.List;
 
 public interface JobService {
@@ -7,11 +9,13 @@ public interface JobService {
 
     void insertJob(Job job);
 
-    void updateJob(Job job) throws JobNotFoundException;
+    Job updateJob(Job job) throws JobNotFoundException;
 
     void deleteJob(String id) throws JobNotFoundException;
 
     List<Job> fetchFutureJobsSortedByDate();
 
     List<Job> fetchAllJobs();
+
+    void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException;
 }

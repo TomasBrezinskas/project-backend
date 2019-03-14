@@ -1,5 +1,10 @@
 package com.backend.appbackend.job;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.backend.appbackend.user.User;
+import com.backend.appbackend.user.UserException;
+import com.backend.appbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -14,12 +19,12 @@ import java.util.List;
 @Service
 public class JobServiceImpl implements JobService {
 
-    private JobRepository jobRepository;
+    @Autowired
+    JobRepository jobRepository;
 
     @Autowired
-    public JobServiceImpl(JobRepository jobRepository) {
-        this.jobRepository = jobRepository;
-    }
+    UserService userService;
+
 
     @Override
     public Job getJob(String id) throws JobNotFoundException {
@@ -32,9 +37,9 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void updateJob(Job job) throws JobNotFoundException {
+    public Job updateJob(Job job) throws JobNotFoundException {
         getJob(job.getId());
-        jobRepository.save(job);
+        return jobRepository.save(job);
     }
 
     @Override
@@ -51,6 +56,14 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<Job> fetchAllJobs() {
         return jobRepository.findAll();
+    }
+
+    @Override
+    public void insertParticipant(String token, String id) throws UserException, JobNotFoundException {
+        String email = getEmailFromToken(token);
+        Job job = getJob(id);
+        job.getTeam().add(userService.findUserByEmail(email));
+        updateJob(job);
     }
 
     private List<Job> filterActiveJobs() {
@@ -76,5 +89,16 @@ public class JobServiceImpl implements JobService {
     private List<Job> sortJobsByDate() {
         Sort sort = new Sort(Sort.Direction.ASC, "date");
         return jobRepository.findAll(sort);
+    }
+
+    private DecodedJWT getDecodedToken(String token) {
+        String[] tokenParts = token.split(" ");
+        token = tokenParts[2];
+        return JWT.decode(token);
+    }
+
+    private String getEmailFromToken(String token) {
+        DecodedJWT decodedToken = getDecodedToken(token);
+        return decodedToken.getClaim("sub").asString();
     }
 }

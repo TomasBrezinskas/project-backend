@@ -1,6 +1,7 @@
 package com.backend.appbackend.job;
 
 import com.backend.appbackend.user.User;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -59,7 +61,17 @@ public class Job {
 
     private User organizator;
 
-    private List<User> participants;
+    @NotBlank
+    @UniqueElements
+    private List<User> team;
+
+    public void setTeam(List<User> team) {
+        this.team = team;
+    }
+
+    public List<User> getTeam() {
+        return team;
+    }
 
     public User getOrganizator() {
         return organizator;
@@ -70,15 +82,6 @@ public class Job {
     }
 
     public Job() {
-
-    }
-
-    public List<User> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipant(User participant) {
-        this.participants.add(participant);
     }
 
     public String getDate() {

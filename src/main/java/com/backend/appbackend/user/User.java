@@ -1,5 +1,7 @@
 package com.backend.appbackend.user;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
@@ -40,9 +42,6 @@ public class User {
         this.id = id;
     }
 
-    public User() {
-    }
-
     public String getName() {
         return name;
     }
@@ -81,5 +80,25 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return new EqualsBuilder()
+                .append(id, user.id)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new org.apache.commons.lang3.builder.HashCodeBuilder(17, 37)
+                .append(id)
+                .toHashCode();
     }
 }

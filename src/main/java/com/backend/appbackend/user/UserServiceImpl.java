@@ -25,6 +25,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByEmail(String email) throws UserException {
+        return userRepository.findUserByEmail(email).orElseThrow(() ->  new UserException("User not found in database."));
+    }
+
+    @Override
     public void insertUser(User user) {
         userRepository.save(user);
     }
@@ -43,9 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void signUpUser(@Valid User user) throws UserException {
-        if (userRepository.findUserByEmail(user.getEmail()) != null) {
-            throw new UserException("Email " + user.getEmail() + " already in the database.");
-        }
+        userRepository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UserException("Email " + user.getEmail() + " already in the database."));
         user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
         userRepository.save(user);
     }
