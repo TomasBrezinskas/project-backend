@@ -17,5 +17,7 @@ public interface JobService {
 
     List<Job> fetchAllJobs();
 
+    List<Job> fetchNotActiveJobs();
+
     void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException;
 }

@@ -7,4 +7,5 @@ public final class SecurityUtils {
     public static final String HEADER_STRING = "Authorization";
     public static final String SIGN_UP_URL = "/sign-up";
     public static final String VIEW_JOBS_URL = "/jobs/all";
+    public static final String VIEW_STORIES_URL = "/stories";
 }

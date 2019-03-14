@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.backend.appbackend.job.JobUtils.DATE_FORMAT;
+
 @Service
 public class JobServiceImpl implements JobService {
 
@@ -65,6 +67,8 @@ public class JobServiceImpl implements JobService {
         return jobRepository.findAll();
     }
 
+    public List<Job> fetchNotActiveJobs() {return getFilteredNotActiveJobs();}
+
     @Override
     public void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException {
         String email = getEmailFromToken(token);
@@ -84,14 +88,13 @@ public class JobServiceImpl implements JobService {
 
     private List<Job> filterActiveJobs() {
         List<Job> sortedJobs = sortJobsByDate();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         Date jobDate;
 
         List<Job> filteredActiveJobs = new ArrayList<>();
         for (int i = 0; i < sortedJobs.size(); i++) {
             try {
-                jobDate = dateFormat.parse(sortedJobs.get(i).getDate());
+                jobDate = DATE_FORMAT.parse(sortedJobs.get(i).getDate());
                 if (jobDate.after(date) || jobDate.equals(date)) {
                     filteredActiveJobs.add(sortedJobs.get(i));
                 }
@@ -100,6 +103,25 @@ public class JobServiceImpl implements JobService {
             }
         }
         return filteredActiveJobs;
+    }
+
+    private List<Job> getFilteredNotActiveJobs() {
+        Date date = new Date();
+        Date jobDate;
+        List<Job> jobs = jobRepository.findAll();
+
+        List<Job> filteredNotActiveJobs = new ArrayList<>();
+        for (int i = 0; i < jobs.size(); i++) {
+            try {
+                jobDate = DATE_FORMAT.parse(jobs.get(i).getDate());
+                if (jobDate.before(date)) {
+                    filteredNotActiveJobs.add(jobs.get(i));
+                }
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return filteredNotActiveJobs;
     }
 
     private List<Job> sortJobsByDate() {

@@ -69,6 +69,11 @@ public class JobController {
         return jobService.fetchAllJobs();
     }
 
+    @RequestMapping(value = "/jobs/notactive")
+    public List<Job> fetchNotActiveJobs() {
+        return jobService.fetchNotActiveJobs();
+    }
+
     @PostMapping(value = "/job/join")
     public void insertParticipant(@RequestHeader("Authorization") String token, @RequestBody String id) {
         try {

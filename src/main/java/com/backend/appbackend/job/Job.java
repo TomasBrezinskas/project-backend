@@ -3,6 +3,7 @@ package com.backend.appbackend.job;
 import com.backend.appbackend.user.User;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
@@ -21,6 +22,7 @@ public class Job {
     private String date;
 
     @NotBlank
+    @Column(unique = true)
     @Size(max = 64, message = "Max length for field: \"Idea\" is 64")
     private String idea;
 
