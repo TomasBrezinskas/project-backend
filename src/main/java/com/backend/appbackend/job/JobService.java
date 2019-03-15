@@ -7,7 +7,7 @@ import java.util.List;
 public interface JobService {
     Job getJob(String id) throws JobNotFoundException;
 
-    void insertJob(Job job, String token);
+    void insertJob(Job job, String token) throws JobIdeaAlreadyExistsException;
 
     Job updateJob(Job job) throws JobNotFoundException;
 

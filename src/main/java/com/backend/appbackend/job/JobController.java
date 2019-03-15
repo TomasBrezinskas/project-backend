@@ -2,6 +2,7 @@ package com.backend.appbackend.job;
 
 import com.backend.appbackend.user.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,11 @@ public class JobController {
 
     @PostMapping(value = "/job")
     public ResponseEntity<Object> insertJob(@RequestHeader("Authorization") String token, @Valid @RequestBody Job job) {
-        jobService.insertJob(job, token);
+        try {
+            jobService.insertJob(job, token);
+        } catch (JobIdeaAlreadyExistsException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(job.getId()).toUri();
         return ResponseEntity.created(location).build();

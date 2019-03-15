@@ -35,12 +35,15 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void insertJob(Job job, String token) {
+    public void insertJob(Job job, String token) throws JobIdeaAlreadyExistsException{
         String email = getEmailFromToken(token);
         try {
             job.setOrganizator(userService.findUserByEmail(email));
         } catch (UserException ex) {
             ex.printStackTrace();
+        }
+        if(jobRepository.findJobByIdea(job.getIdea()) != null) {
+            throw new JobIdeaAlreadyExistsException("This Idea already exists in the database.");
         }
         jobRepository.save(job);
     }
