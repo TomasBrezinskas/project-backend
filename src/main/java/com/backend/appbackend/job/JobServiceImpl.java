@@ -60,11 +60,11 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<JobResponse> fetchFutureJobsSortedByDate(String token) {
-        String email = getEmailFromToken(token);
         List<JobResponse> jobResponses = convertJob(filterActiveJobs());
 
         if (token != null) {
             try {
+                String email = getEmailFromToken(token);
                 for (JobResponse jobResponse : jobResponses) {
                     if (jobResponse.getTeam().contains(userService.findUserByEmail(email))) { //|| jobResponse.getOrganizator().equals(userService.findUserByEmail(email))) {
                         jobResponse.setUserInTeamTrue();
