@@ -13,7 +13,7 @@ public interface JobService {
 
     void deleteJob(String id) throws JobNotFoundException;
 
-    List<Job> fetchFutureJobsSortedByDate();
+    List<JobResponse> fetchFutureJobsSortedByDate(String token);
 
     List<Job> fetchAllJobs();
 

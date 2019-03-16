@@ -59,8 +59,23 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> fetchFutureJobsSortedByDate() {
-        return filterActiveJobs();
+    public List<JobResponse> fetchFutureJobsSortedByDate(String token) {
+        String email = getEmailFromToken(token);
+        List<JobResponse> jobResponses = convertJob(filterActiveJobs());
+
+        if(token != null) {
+            try {
+                for(JobResponse jobResponse: jobResponses) {
+                    if (jobResponse.getTeam().contains(userService.findUserByEmail(email)) ){ //|| jobResponse.getOrganizator().equals(userService.findUserByEmail(email))) {
+                        System.out.println(jobResponse.getIdea());
+                        jobResponse.setUserInTeamTrue();
+                    }
+                }
+            } catch (UserException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return jobResponses;
     }
 
     @Override
@@ -142,5 +157,28 @@ public class JobServiceImpl implements JobService {
     private String getEmailFromToken(String token) {
         DecodedJWT decodedToken = getDecodedToken(token);
         return decodedToken.getClaim("sub").asString();
+    }
+
+    private List<JobResponse> convertJob(List<Job> jobs) {
+        List<JobResponse> jobResponses = new ArrayList<>();
+        for(Job job: jobs) {
+            JobResponse jobResponse = new JobResponse();
+            jobResponse.setId(job.getId());
+            jobResponse.setDate(job.getDate());
+            jobResponse.setIdea(job.getIdea());
+            jobResponse.setOrganisation(job.getOrganisation());
+            jobResponse.setRegion(job.getRegion());
+            jobResponse.setCategory(job.getCategory());
+            jobResponse.setEmail(job.getEmail());
+            jobResponse.setContactName(job.getContactName());
+            jobResponse.setWebsite(job.getWebsite());
+            jobResponse.setPhone(job.getPhone());
+            jobResponse.setDescription(job.getDescription());
+            jobResponse.setOrganizator(job.getOrganizator());
+            jobResponse.setTeam(job.getTeam());
+
+            jobResponses.add(jobResponse);
+        }
+        return  jobResponses;
     }
 }

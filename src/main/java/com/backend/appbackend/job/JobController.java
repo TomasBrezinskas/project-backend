@@ -64,8 +64,8 @@ public class JobController {
     }
 
     @RequestMapping(value = "/jobs/all")
-    public List<Job> fetchActiveSortedJobs() {
-        return jobService.fetchFutureJobsSortedByDate();
+    public List<JobResponse> fetchActiveSortedJobs(@RequestHeader(value = "Authorization", required = false) String token) {
+        return jobService.fetchFutureJobsSortedByDate(token);
     }
 
     @RequestMapping(value = "/jobs/allnosort")
