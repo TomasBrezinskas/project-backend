@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,14 +33,14 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void insertJob(Job job, String token) throws JobIdeaAlreadyExistsException{
+    public void insertJob(Job job, String token) throws JobIdeaAlreadyExistsException {
         String email = getEmailFromToken(token);
         try {
             job.setOrganizator(userService.findUserByEmail(email));
         } catch (UserException ex) {
             ex.printStackTrace();
         }
-        if(jobRepository.findJobByIdea(job.getIdea()) != null) {
+        if (jobRepository.findJobByIdea(job.getIdea()) != null) {
             throw new JobIdeaAlreadyExistsException("This Idea already exists in the database.");
         }
         jobRepository.save(job);
@@ -70,7 +68,9 @@ public class JobServiceImpl implements JobService {
         return jobRepository.findAll();
     }
 
-    public List<Job> fetchNotActiveJobs() {return getFilteredNotActiveJobs();}
+    public List<Job> fetchNotActiveJobs() {
+        return getFilteredNotActiveJobs();
+    }
 
     @Override
     public void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException {
