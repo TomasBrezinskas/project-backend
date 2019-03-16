@@ -63,11 +63,10 @@ public class JobServiceImpl implements JobService {
         String email = getEmailFromToken(token);
         List<JobResponse> jobResponses = convertJob(filterActiveJobs());
 
-        if(token != null) {
+        if (token != null) {
             try {
-                for(JobResponse jobResponse: jobResponses) {
-                    if (jobResponse.getTeam().contains(userService.findUserByEmail(email)) ){ //|| jobResponse.getOrganizator().equals(userService.findUserByEmail(email))) {
-                        System.out.println(jobResponse.getIdea());
+                for (JobResponse jobResponse : jobResponses) {
+                    if (jobResponse.getTeam().contains(userService.findUserByEmail(email))) { //|| jobResponse.getOrganizator().equals(userService.findUserByEmail(email))) {
                         jobResponse.setUserInTeamTrue();
                     }
                 }
@@ -101,6 +100,20 @@ public class JobServiceImpl implements JobService {
             throw new TeamIsFullException("Team is full");
         }
         job.getTeam().add(userService.findUserByEmail(email));
+        updateJob(job);
+    }
+
+    @Override
+    public void cancelParticipant(String token, String id) throws UserException, JobNotFoundException {
+        String email = getEmailFromToken(token);
+        Job job = getJob(id);
+        if (!(job.getTeam().contains(userService.findUserByEmail(email)))) {
+            throw new UserException("User is not participating in this job.");
+        }
+        if (job.getOrganizator().getEmail().equals(email)) {
+            throw new UserException("User cannot cancel as he is organizing this job.");
+        }
+        job.getTeam().remove(userService.findUserByEmail(email));
         updateJob(job);
     }
 
@@ -161,7 +174,7 @@ public class JobServiceImpl implements JobService {
 
     private List<JobResponse> convertJob(List<Job> jobs) {
         List<JobResponse> jobResponses = new ArrayList<>();
-        for(Job job: jobs) {
+        for (Job job : jobs) {
             JobResponse jobResponse = new JobResponse();
             jobResponse.setId(job.getId());
             jobResponse.setDate(job.getDate());
@@ -179,6 +192,6 @@ public class JobServiceImpl implements JobService {
 
             jobResponses.add(jobResponse);
         }
-        return  jobResponses;
+        return jobResponses;
     }
 }

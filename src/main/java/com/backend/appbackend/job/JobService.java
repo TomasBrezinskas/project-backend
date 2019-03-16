@@ -20,4 +20,6 @@ public interface JobService {
     List<Job> fetchNotActiveJobs();
 
     void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException;
+
+    void cancelParticipant(String token, String id) throws UserException, JobNotFoundException;
 }

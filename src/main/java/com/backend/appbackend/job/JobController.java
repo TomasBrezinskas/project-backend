@@ -86,4 +86,13 @@ public class JobController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
+    @PostMapping(value = "/job/leave")
+    public void cancelParticipant(@RequestHeader("Authorization") String token, @RequestBody String id) {
+        try {
+            jobService.cancelParticipant(token, id);
+        } catch (JobNotFoundException | UserException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
 }
