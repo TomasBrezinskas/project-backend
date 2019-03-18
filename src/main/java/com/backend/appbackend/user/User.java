@@ -23,7 +23,7 @@ public class User {
 
     @Email
     @Column(unique = true)
-    @Size(max = 64, message = "Max length for field: \"Email\" is 64")
+    @Size(max = 128, message = "Max length for field: \"Email\" is 128")
     private String email;
 
     @NotBlank
