@@ -18,6 +18,7 @@ public class JobResponse {
     private String description;
     private User organizator;
     private List<User> team;
+    private boolean approved;
 
     private boolean isUserInTeam = false;
 
@@ -38,6 +39,15 @@ public class JobResponse {
         this.description = job.getDescription();
         this.organizator = job.getOrganizator();
         this.team = job.getTeam();
+        this.approved = job.getApproved();
+    }
+
+    public boolean getApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     public boolean getIsUserInTeam() {

@@ -63,6 +63,17 @@ public class Job {
 
     private List<User> team;
 
+    @NotBlank
+    private boolean approved;
+
+    public boolean getApproved() {
+        return approved;
+    }
+
+    public void setApprovedTrue() {
+        this.approved = true;
+    }
+
     public void setTeam(List<User> team) {
         this.team = team;
     }

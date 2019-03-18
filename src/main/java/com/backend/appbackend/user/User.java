@@ -34,6 +34,16 @@ public class User {
     @Size(min = 7, message = "Min length for field: \"Password\" is 7")
     private String password;
 
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public String getId() {
         return id;
     }

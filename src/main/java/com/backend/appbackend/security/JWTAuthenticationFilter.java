@@ -2,6 +2,7 @@ package com.backend.appbackend.security;
 
 import com.auth0.jwt.JWT;
 import com.backend.appbackend.user.User;
+import com.backend.appbackend.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,12 +21,18 @@ import java.util.Date;
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.backend.appbackend.security.SecurityUtils.*;
 
+
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    //private JobServiceImpl jobService;
+
+    private UserRepository userRepository;
 
     private AuthenticationManager authenticationManager;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -58,5 +65,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(HMAC512(SECRET.getBytes()));
         res.addHeader("Access-Control-Expose-Headers", "Authorization");
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+
+
+        String email = getEmailFromToken(res.getHeader(HEADER_STRING));
+        User user = userRepository.findUserByEmail(email);
+
+        res.setContentType("text/html");
+        res.setCharacterEncoding("UTF-8");
+        res.getWriter().write(user.getRole());
     }
+
+
 }

@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Document
 public class Story {
@@ -22,7 +23,17 @@ public class Story {
     @NotBlank
     private Job job;
 
+    private List<String> images;
+
     public Story() {
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
     public String getDescription() {

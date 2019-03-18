@@ -167,7 +167,7 @@ public class JobServiceImpl implements JobService {
         return JWT.decode(token);
     }
 
-    private String getEmailFromToken(String token) {
+    public String getEmailFromToken(String token) {
         DecodedJWT decodedToken = getDecodedToken(token);
         return decodedToken.getClaim("sub").asString();
     }
@@ -189,6 +189,7 @@ public class JobServiceImpl implements JobService {
             jobResponse.setDescription(job.getDescription());
             jobResponse.setOrganizator(job.getOrganizator());
             jobResponse.setTeam(job.getTeam());
+            jobResponse.setApproved(job.getApproved());
 
             jobResponses.add(jobResponse);
         }
