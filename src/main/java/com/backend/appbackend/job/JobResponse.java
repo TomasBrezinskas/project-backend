@@ -20,6 +20,8 @@ public class JobResponse {
     private List<User> team;
     private boolean approved;
 
+    private boolean canceled;
+
     private boolean isUserInTeam = false;
 
     public JobResponse() {
@@ -40,6 +42,15 @@ public class JobResponse {
         this.organizator = job.getOrganizator();
         this.team = job.getTeam();
         this.approved = job.getApproved();
+        this.canceled = job.getCanceled();
+    }
+
+    public boolean isCanceled() {
+        return canceled;
+    }
+
+    public void setCanceledTrue() {
+        this.canceled = true;
     }
 
     public boolean getApproved() {

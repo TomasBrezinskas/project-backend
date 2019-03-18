@@ -24,8 +24,6 @@ import static com.backend.appbackend.security.SecurityUtils.*;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    //private JobServiceImpl jobService;
-
     private UserRepository userRepository;
 
     private AuthenticationManager authenticationManager;
@@ -66,7 +64,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         res.addHeader("Access-Control-Expose-Headers", "Authorization");
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 
-
         String email = getEmailFromToken(res.getHeader(HEADER_STRING));
         User user = userRepository.findUserByEmail(email);
 
@@ -74,6 +71,4 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         res.setCharacterEncoding("UTF-8");
         res.getWriter().write("{\"role\":\"" + user.getRole() + "\"}");
     }
-
-
 }

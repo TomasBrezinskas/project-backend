@@ -13,6 +13,8 @@ public interface JobService {
 
     void deleteJob(String id) throws JobNotFoundException;
 
+    List<Job> fetchNotApprovedJobs();
+
     List<JobResponse> fetchFutureJobsSortedByDate(String token);
 
     List<Job> fetchAllJobs();
@@ -22,4 +24,8 @@ public interface JobService {
     void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException;
 
     void cancelParticipant(String token, String id) throws UserException, JobNotFoundException;
+
+    void approveJob(String id) throws JobNotFoundException;
+
+    void cancelJob(String id) throws JobNotFoundException;
 }

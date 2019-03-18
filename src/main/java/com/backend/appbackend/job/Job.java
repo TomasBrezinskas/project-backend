@@ -63,8 +63,17 @@ public class Job {
 
     private List<User> team;
 
-    @NotBlank
-    private boolean approved;
+    private boolean approved = false;
+
+    private boolean canceled = false;
+
+    public boolean getCanceled() {
+        return canceled;
+    }
+
+    public void setCanceledTrue() {
+        this.canceled = true;
+    }
 
     public boolean getApproved() {
         return approved;

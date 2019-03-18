@@ -59,14 +59,19 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    public List<Job> fetchNotApprovedJobs() {
+        return filterActiveJobs(false);
+    }
+
+    @Override
     public List<JobResponse> fetchFutureJobsSortedByDate(String token) {
-        List<JobResponse> jobResponses = convertJob(filterActiveJobs());
+        List<JobResponse> jobResponses = convertJob(filterActiveJobs(true));
 
         if (token != null) {
             try {
                 String email = getEmailFromToken(token);
                 for (JobResponse jobResponse : jobResponses) {
-                    if (jobResponse.getTeam().contains(userService.findUserByEmail(email))) { //|| jobResponse.getOrganizator().equals(userService.findUserByEmail(email))) {
+                    if (jobResponse.getTeam().contains(userService.findUserByEmail(email)) || jobResponse.getOrganizator().equals(userService.findUserByEmail(email))) {
                         jobResponse.setUserInTeamTrue();
                     }
                 }
@@ -117,7 +122,17 @@ public class JobServiceImpl implements JobService {
         updateJob(job);
     }
 
-    private List<Job> filterActiveJobs() {
+    @Override
+    public void approveJob() throws JobNotFoundException {
+        //#TODO
+    }
+
+    @Override
+    public void cancelJob() throws JobNotFoundException {
+        //#TODO
+    }
+
+    private List<Job> filterActiveJobs(boolean status) {
         List<Job> sortedJobs = sortJobsByDate();
         Date date = new Date();
         Date jobDate;
@@ -126,9 +141,9 @@ public class JobServiceImpl implements JobService {
         for (int i = 0; i < sortedJobs.size(); i++) {
             try {
                 jobDate = DATE_FORMAT.parse(sortedJobs.get(i).getDate());
-                if (jobDate.after(date) || jobDate.equals(date)) {
+                if ( (jobDate.after(date) || jobDate.equals(date)) && sortedJobs.get(i).getApproved() == status && !sortedJobs.get(i).getCanceled()) {
                     filteredActiveJobs.add(sortedJobs.get(i));
-                }
+            }
             } catch (ParseException ex) {
                 ex.printStackTrace();
             }
