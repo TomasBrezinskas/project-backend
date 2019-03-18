@@ -1,7 +1,5 @@
 package com.backend.appbackend.job;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.backend.appbackend.user.UserException;
 import com.backend.appbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.backend.appbackend.job.JobUtils.DATE_FORMAT;
+import static com.backend.appbackend.security.SecurityUtils.getEmailFromToken;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -47,9 +46,9 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job updateJob(Job job) throws JobNotFoundException {
+    public void updateJob(Job job) throws JobNotFoundException {
         getJob(job.getId());
-        return jobRepository.save(job);
+        jobRepository.save(job);
     }
 
     @Override
@@ -123,13 +122,17 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void approveJob() throws JobNotFoundException {
-        //#TODO
+    public void approveJob(String id) throws JobNotFoundException {
+        Job job = getJob(id);
+        job.setApprovedTrue();
+        updateJob(job);
     }
 
     @Override
-    public void cancelJob() throws JobNotFoundException {
-        //#TODO
+    public void cancelJob(String id) throws JobNotFoundException {
+        Job job = getJob(id);
+        job.setCanceledTrue();
+        updateJob(job);
     }
 
     private List<Job> filterActiveJobs(boolean status) {
@@ -138,12 +141,12 @@ public class JobServiceImpl implements JobService {
         Date jobDate;
 
         List<Job> filteredActiveJobs = new ArrayList<>();
-        for (int i = 0; i < sortedJobs.size(); i++) {
+        for (Job sortedJob: sortedJobs) {
             try {
-                jobDate = DATE_FORMAT.parse(sortedJobs.get(i).getDate());
-                if ( (jobDate.after(date) || jobDate.equals(date)) && sortedJobs.get(i).getApproved() == status && !sortedJobs.get(i).getCanceled()) {
-                    filteredActiveJobs.add(sortedJobs.get(i));
-            }
+                jobDate = DATE_FORMAT.parse(sortedJob.getDate());
+                if ((jobDate.after(date) || jobDate.equals(date)) && sortedJob.getApproved() == status && !sortedJob.getCanceled()) {
+                    filteredActiveJobs.add(sortedJob);
+                }
             } catch (ParseException ex) {
                 ex.printStackTrace();
             }
@@ -157,11 +160,12 @@ public class JobServiceImpl implements JobService {
         List<Job> jobs = jobRepository.findAll();
 
         List<Job> filteredNotActiveJobs = new ArrayList<>();
-        for (int i = 0; i < jobs.size(); i++) {
+
+        for (Job job: jobs) {
             try {
-                jobDate = DATE_FORMAT.parse(jobs.get(i).getDate());
+                jobDate = DATE_FORMAT.parse(job.getDate());
                 if (jobDate.before(date)) {
-                    filteredNotActiveJobs.add(jobs.get(i));
+                    filteredNotActiveJobs.add(job);
                 }
             } catch (ParseException ex) {
                 ex.printStackTrace();
@@ -173,18 +177,6 @@ public class JobServiceImpl implements JobService {
     private List<Job> sortJobsByDate() {
         Sort sort = new Sort(Sort.Direction.ASC, "date");
         return jobRepository.findAll(sort);
-    }
-
-    private DecodedJWT getDecodedToken(String token) {
-        //#TODO jei bad request tai programa luzta tai not that great
-        String[] tokenParts = token.split(" ");
-        token = tokenParts[1];
-        return JWT.decode(token);
-    }
-
-    public String getEmailFromToken(String token) {
-        DecodedJWT decodedToken = getDecodedToken(token);
-        return decodedToken.getClaim("sub").asString();
     }
 
     private List<JobResponse> convertJob(List<Job> jobs) {

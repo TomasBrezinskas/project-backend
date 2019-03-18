@@ -9,7 +9,7 @@ public interface JobService {
 
     void insertJob(Job job, String token) throws JobIdeaAlreadyExistsException;
 
-    Job updateJob(Job job) throws JobNotFoundException;
+    void updateJob(Job job) throws JobNotFoundException;
 
     void deleteJob(String id) throws JobNotFoundException;
 
