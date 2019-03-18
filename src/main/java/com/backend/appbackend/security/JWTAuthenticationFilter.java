@@ -70,9 +70,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String email = getEmailFromToken(res.getHeader(HEADER_STRING));
         User user = userRepository.findUserByEmail(email);
 
-        res.setContentType("text/html");
+        res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
-        res.getWriter().write(user.getRole());
+        res.getWriter().write("{\"role\":\"" + user.getRole() + "\"}");
     }
 
 
