@@ -164,7 +164,7 @@ public class JobServiceImpl implements JobService {
         for (Job job: jobs) {
             try {
                 jobDate = DATE_FORMAT.parse(job.getDate());
-                if (jobDate.before(date)) {
+                if (jobDate.before(date) && !job.getCanceled()) {
                     filteredNotActiveJobs.add(job);
                 }
             } catch (ParseException ex) {
