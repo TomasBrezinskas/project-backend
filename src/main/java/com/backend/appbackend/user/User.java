@@ -26,7 +26,6 @@ public class User {
     @Size(max = 128, message = "Max length for field: \"Email\" is 128")
     private String email;
 
-    @NotBlank
     @Size(max = 64, message = "Max length for field: \"Region\" is 64")
     private String region;
 
