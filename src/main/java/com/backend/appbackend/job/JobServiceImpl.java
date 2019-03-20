@@ -182,22 +182,23 @@ public class JobServiceImpl implements JobService {
     private List<JobResponse> convertJob(List<Job> jobs) {
         List<JobResponse> jobResponses = new ArrayList<>();
         for (Job job : jobs) {
-            JobResponse jobResponse = new JobResponse();
-            jobResponse.setId(job.getId());
-            jobResponse.setDate(job.getDate());
-            jobResponse.setIdea(job.getIdea());
-            jobResponse.setOrganisation(job.getOrganisation());
-            jobResponse.setRegion(job.getRegion());
-            jobResponse.setCategory(job.getCategory());
-            jobResponse.setEmail(job.getEmail());
-            jobResponse.setContactName(job.getContactName());
-            jobResponse.setWebsite(job.getWebsite());
-            jobResponse.setPhone(job.getPhone());
-            jobResponse.setDescription(job.getDescription());
-            jobResponse.setOrganizator(job.getOrganizator());
-            jobResponse.setTeam(job.getTeam());
-            jobResponse.setApproved(job.getApproved());
-
+            JobResponse jobResponse = new JobResponse(
+                    job.getId(),
+                    job.getDate(),
+                    job.getIdea(),
+                    job.getOrganisation(),
+                    job.getRegion(),
+                    job.getCategory(),
+                    job.getEmail(),
+                    job.getContactName(),
+                    job.getWebsite(),
+                    job.getPhone(),
+                    job.getDescription(),
+                    job.getOrganizator(),
+                    job.getTeam(),
+                    job.getApproved(),
+                    job.getCanceled()
+            );
             jobResponses.add(jobResponse);
         }
         return jobResponses;

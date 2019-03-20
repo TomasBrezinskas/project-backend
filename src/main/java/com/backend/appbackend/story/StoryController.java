@@ -32,8 +32,12 @@ public class StoryController {
     }
 
     @GetMapping(value = "/stories")
-    public List<Story> getStories() {
-        return storyService.getStories();
+    public List<StoryResponse> getStories() {
+        try {
+            return storyService.getStories();
+        } catch (StoryNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
     @PostMapping(value = "/story")
@@ -42,5 +46,14 @@ public class StoryController {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(story.getId()).toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping(value = "/story/{id}/images")
+    public List<String> getImagesFromStory(@PathVariable String id) {
+        try {
+            return storyService.getImagesFromStory(id);
+        } catch (StoryNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 }

@@ -27,22 +27,22 @@ public class JobResponse {
     public JobResponse() {
     }
 
-    public JobResponse(Job job) {
-        this.id = job.getId();
-        this.date = job.getDate();
-        this.idea = job.getIdea();
-        this.organisation = job.getOrganisation();
-        this.region = job.getRegion();
-        this.category = job.getCategory();
-        this.email = job.getEmail();
-        this.contactName = job.getContactName();
-        this.website = job.getWebsite();
-        this.phone = job.getPhone();
-        this.description = job.getDescription();
-        this.organizator = job.getOrganizator();
-        this.team = job.getTeam();
-        this.approved = job.getApproved();
-        this.canceled = job.getCanceled();
+    public JobResponse(String id, String date, String idea, String organisation, String region, String category, String email, String contactName, String website, String phone, String description, User organizator, List<User> team, boolean approved, boolean canceled) {
+        this.id = id;
+        this.date = date;
+        this.idea = idea;
+        this.organisation = organisation;
+        this.region = region;
+        this.category = category;
+        this.email = email;
+        this.contactName = contactName;
+        this.website = website;
+        this.phone = phone;
+        this.description = description;
+        this.organizator = organizator;
+        this.team = team;
+        this.approved = approved;
+        this.canceled = canceled;
     }
 
     public boolean isCanceled() {
