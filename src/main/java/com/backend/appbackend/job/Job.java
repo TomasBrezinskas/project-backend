@@ -63,9 +63,9 @@ public class Job {
 
     private List<User> team;
 
-    private boolean approved = false;
+    private boolean approved;
 
-    private boolean canceled = false;
+    private boolean canceled;
 
     public boolean getCanceled() {
         return canceled;
@@ -100,6 +100,8 @@ public class Job {
     }
 
     public Job() {
+        this.approved = false;
+        this.canceled = false;
     }
 
     public String getDate() {
