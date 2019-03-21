@@ -41,7 +41,7 @@ public class StoryController {
     }
 
     @PostMapping(value = "/story")
-    public ResponseEntity<Object> insertStory(@RequestBody Story story) {
+    public ResponseEntity<Object> insertStory(@RequestBody StoryRegistration story) {
         storyService.insertStory(story);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(story.getId()).toUri();

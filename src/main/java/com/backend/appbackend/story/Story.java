@@ -12,8 +12,6 @@ import java.util.List;
 @Document
 public class Story {
 
-    @Id
-    @GeneratedValue
     private String id;
 
     @NotBlank
@@ -25,9 +23,14 @@ public class Story {
 
     private List<String> images;
 
-    private boolean hasImages = false;
+    private boolean hasImages;
 
-    public Story() {
+    public Story(String id, @NotBlank @Size(max = 1024, message = "Max length for field: \"Description\" is 1024") String description, @NotBlank Job job, List<String> images, boolean hasImages) {
+        this.id = id;
+        this.description = description;
+        this.job = job;
+        this.images = images;
+        this.hasImages = hasImages;
     }
 
     public void setHasImagesToTrue() {

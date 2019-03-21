@@ -18,7 +18,7 @@ public class StoryResponse {
     @NotBlank
     private Job job;
 
-    private boolean hasImages;
+    private boolean hasImages = false;
 
     public StoryResponse(String id, @NotBlank @Size(max = 1024, message = "Max length for field: \"Description\" is 1024") String description, @NotBlank Job job, boolean hasImages) {
         this.id = id;

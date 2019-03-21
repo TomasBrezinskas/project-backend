@@ -6,6 +6,7 @@ import com.backend.appbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -125,7 +126,7 @@ public class JobServiceImpl implements JobService {
             throw new UserException("User cannot cancel as he is organizing this job.");
         }
         User user = userService.findUserByEmail(email);
-        user.getAttendedJobs().remove(job);
+        user.getAttendedJobs().remove(job.getIdea());
         userService.updateUser(user);
         job.getTeam().remove(user);
         updateJob(job);

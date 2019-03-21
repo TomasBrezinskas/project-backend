@@ -8,7 +8,7 @@ public interface StoryService {
 
     List<StoryResponse> getStories() throws StoryNotFoundException;
 
-    void insertStory(Story story);
+    void insertStory(StoryRegistration story);
 
     List<String> getImagesFromStory(String id) throws StoryNotFoundException;
 }

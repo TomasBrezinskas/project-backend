@@ -21,8 +21,6 @@ public interface JobService {
 
     List<Job> fetchNotActiveJobs();
 
-    Job fetchJobByIdea(String idea) throws JobNotFoundException;
-
     void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException;
 
     void cancelParticipant(String token, String id) throws UserException, JobNotFoundException;
@@ -32,4 +30,6 @@ public interface JobService {
     void cancelJob(String id) throws JobNotFoundException;
 
     List<String> fetchUsersNotActiveJobs(String token) throws UserException;
+
+    Job fetchJobByIdea(String idea);
 }

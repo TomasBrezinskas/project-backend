@@ -128,13 +128,4 @@ public class JobController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
-
-    @GetMapping(value = "/story/job")
-    public Job fetchJobByIdea(String idea) {
-        try {
-            return jobService.fetchJobByIdea(idea);
-        } catch (JobNotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
-        }
-    }
 }
