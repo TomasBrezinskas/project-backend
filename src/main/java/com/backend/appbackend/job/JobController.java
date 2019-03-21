@@ -121,7 +121,7 @@ public class JobController {
     }
 
     @GetMapping(value = "/story/jobs")
-    public List<Job> fetchUsersNotActiveJobs(@RequestHeader("Authorization") String token) {
+    public List<String> fetchUsersNotActiveJobs(@RequestHeader("Authorization") String token) {
         try {
             return jobService.fetchUsersNotActiveJobs(token);
         } catch (UserException ex) {

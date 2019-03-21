@@ -29,5 +29,5 @@ public interface JobService {
 
     void cancelJob(String id) throws JobNotFoundException;
 
-    List<Job> fetchUsersNotActiveJobs(String token) throws UserException;
+    List<String> fetchUsersNotActiveJobs(String token) throws UserException;
 }

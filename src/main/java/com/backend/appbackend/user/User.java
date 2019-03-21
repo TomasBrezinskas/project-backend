@@ -34,13 +34,13 @@ public class User {
 
     private String role;
 
-    private List<Job> attendedJobs;
+    private List<String> attendedJobs;
 
-    public List<Job> getAttendedJobs() {
+    public List<String> getAttendedJobs() {
         return attendedJobs;
     }
 
-    public void setAttendedJobs(List<Job> attendedJobs) {
+    public void setAttendedJobs(List<String> attendedJobs) {
         this.attendedJobs = attendedJobs;
     }
 

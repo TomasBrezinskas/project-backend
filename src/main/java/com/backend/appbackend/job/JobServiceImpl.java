@@ -37,7 +37,7 @@ public class JobServiceImpl implements JobService {
         String email = getEmailFromToken(token);
         try {
             User organizator = userService.findUserByEmail(email);
-            organizator.getAttendedJobs().add(job);
+            organizator.getAttendedJobs().add(job.getIdea());
             userService.updateUser(organizator);
             job.setOrganizator(organizator);
         } catch (UserException ex) {
@@ -108,7 +108,7 @@ public class JobServiceImpl implements JobService {
             throw new TeamIsFullException("Team is full");
         }
         User user = userService.findUserByEmail(email);
-        user.getAttendedJobs().add(job);
+        user.getAttendedJobs().add(job.getIdea());
         userService.updateUser(user);
         job.getTeam().add(user);
         updateJob(job);
@@ -146,10 +146,31 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> fetchUsersNotActiveJobs(String token) throws UserException {
+    public List<String> fetchUsersNotActiveJobs(String token) throws UserException {
         String email = getEmailFromToken(token);
         User user = userService.findUserByEmail(email);
-        return getFilteredNotActiveJobs(user.getAttendedJobs());
+        List<String> filteredJobs = new ArrayList<>();
+        for (String idea: user.getAttendedJobs()){
+            if(checkIfJobIsNotActive(jobRepository.findJobByIdea(idea))) {
+                filteredJobs.add(idea);
+            }
+        }
+        return filteredJobs;
+    }
+
+    private boolean checkIfJobIsNotActive(Job job) {
+        Date date = new Date();
+
+        Date jobDate;
+        try {
+            jobDate = DATE_FORMAT.parse(job.getDate());
+            if (jobDate.before(date) && !job.getCanceled()) {
+                return true;
+            }
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     private List<Job> filterActiveJobs(boolean status) {
