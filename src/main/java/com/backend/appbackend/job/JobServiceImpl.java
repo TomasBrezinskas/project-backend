@@ -6,7 +6,6 @@ import com.backend.appbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -170,7 +169,7 @@ public class JobServiceImpl implements JobService {
         Date jobDate;
         try {
             jobDate = DATE_FORMAT.parse(job.getDate());
-            if (jobDate.before(date) && !job.getCanceled()) {
+            if (jobDate.before(date) && !job.getCanceled() && job.getApproved()) {
                 return true;
             }
         } catch (ParseException ex) {
