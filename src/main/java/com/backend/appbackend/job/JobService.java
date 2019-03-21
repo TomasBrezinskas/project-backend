@@ -28,4 +28,6 @@ public interface JobService {
     void approveJob(String id) throws JobNotFoundException;
 
     void cancelJob(String id) throws JobNotFoundException;
+
+    List<Job> fetchUsersNotActiveJobs(String token) throws UserException;
 }

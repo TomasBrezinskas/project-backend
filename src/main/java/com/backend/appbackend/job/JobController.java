@@ -109,6 +109,7 @@ public class JobController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
     @PostMapping(value = "/job/admin/cancel/{id}")
     public void cancelJob(@PathVariable String id) {
         try {
@@ -117,5 +118,14 @@ public class JobController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
 
+    }
+
+    @GetMapping(value = "/story/jobs")
+    public List<Job> fetchUsersNotActiveJobs(@RequestHeader("Authorization") String token) {
+        try {
+            return jobService.fetchUsersNotActiveJobs(token);
+        } catch (UserException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 }

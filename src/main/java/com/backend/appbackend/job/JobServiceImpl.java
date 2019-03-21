@@ -1,5 +1,6 @@
 package com.backend.appbackend.job;
 
+import com.backend.appbackend.user.User;
 import com.backend.appbackend.user.UserException;
 import com.backend.appbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,10 @@ public class JobServiceImpl implements JobService {
     public void insertJob(Job job, String token) throws JobIdeaAlreadyExistsException {
         String email = getEmailFromToken(token);
         try {
-            job.setOrganizator(userService.findUserByEmail(email));
+            User organizator = userService.findUserByEmail(email);
+            organizator.getAttendedJobs().add(job);
+            userService.updateUser(organizator);
+            job.setOrganizator(organizator);
         } catch (UserException ex) {
             ex.printStackTrace();
         }
@@ -87,7 +91,7 @@ public class JobServiceImpl implements JobService {
     }
 
     public List<Job> fetchNotActiveJobs() {
-        return getFilteredNotActiveJobs();
+        return getFilteredNotActiveJobs(jobRepository.findAll());
     }
 
     @Override
@@ -103,7 +107,10 @@ public class JobServiceImpl implements JobService {
         if (job.getTeam().size() >= 14) {
             throw new TeamIsFullException("Team is full");
         }
-        job.getTeam().add(userService.findUserByEmail(email));
+        User user = userService.findUserByEmail(email);
+        user.getAttendedJobs().add(job);
+        userService.updateUser(user);
+        job.getTeam().add(user);
         updateJob(job);
     }
 
@@ -117,7 +124,10 @@ public class JobServiceImpl implements JobService {
         if (job.getOrganizator().getEmail().equals(email)) {
             throw new UserException("User cannot cancel as he is organizing this job.");
         }
-        job.getTeam().remove(userService.findUserByEmail(email));
+        User user = userService.findUserByEmail(email);
+        user.getAttendedJobs().remove(job);
+        userService.updateUser(user);
+        job.getTeam().remove(user);
         updateJob(job);
     }
 
@@ -135,13 +145,20 @@ public class JobServiceImpl implements JobService {
         updateJob(job);
     }
 
+    @Override
+    public List<Job> fetchUsersNotActiveJobs(String token) throws UserException {
+        String email = getEmailFromToken(token);
+        User user = userService.findUserByEmail(email);
+        return getFilteredNotActiveJobs(user.getAttendedJobs());
+    }
+
     private List<Job> filterActiveJobs(boolean status) {
         List<Job> sortedJobs = sortJobsByDate();
         Date date = new Date();
         Date jobDate;
 
         List<Job> filteredActiveJobs = new ArrayList<>();
-        for (Job sortedJob: sortedJobs) {
+        for (Job sortedJob : sortedJobs) {
             try {
                 jobDate = DATE_FORMAT.parse(sortedJob.getDate());
                 if ((jobDate.after(date) || jobDate.equals(date)) && sortedJob.getApproved() == status && !sortedJob.getCanceled()) {
@@ -154,14 +171,13 @@ public class JobServiceImpl implements JobService {
         return filteredActiveJobs;
     }
 
-    private List<Job> getFilteredNotActiveJobs() {
+    private List<Job> getFilteredNotActiveJobs(List<Job> jobs) {
         Date date = new Date();
         Date jobDate;
-        List<Job> jobs = jobRepository.findAll();
 
         List<Job> filteredNotActiveJobs = new ArrayList<>();
 
-        for (Job job: jobs) {
+        for (Job job : jobs) {
             try {
                 jobDate = DATE_FORMAT.parse(job.getDate());
                 if (jobDate.before(date) && !job.getCanceled()) {

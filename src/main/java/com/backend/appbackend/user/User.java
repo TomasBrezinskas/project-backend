@@ -1,5 +1,6 @@
 package com.backend.appbackend.user;
 
+import com.backend.appbackend.job.Job;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import javax.persistence.Column;
@@ -7,6 +8,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class User {
 
@@ -26,14 +28,21 @@ public class User {
     @Size(max = 128, message = "Max length for field: \"Email\" is 128")
     private String email;
 
-    @Size(max = 64, message = "Max length for field: \"Region\" is 64")
-    private String region;
-
     @NotBlank
     @Size(min = 7, message = "Min length for field: \"Password\" is 7")
     private String password;
 
     private String role;
+
+    private List<Job> attendedJobs;
+
+    public List<Job> getAttendedJobs() {
+        return attendedJobs;
+    }
+
+    public void setAttendedJobs(List<Job> attendedJobs) {
+        this.attendedJobs = attendedJobs;
+    }
 
     public String getRole() {
         return role;
@@ -73,14 +82,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
     }
 
     public String getPassword() {

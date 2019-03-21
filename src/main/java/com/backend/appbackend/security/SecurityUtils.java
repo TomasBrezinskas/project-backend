@@ -11,6 +11,7 @@ public final class SecurityUtils {
     public static final String SIGN_UP_URL = "/sign-up";
     public static final String VIEW_JOBS_URL = "/jobs/all";
     public static final String VIEW_STORIES_URL = "/stories";
+    public static final String VIEW_STORY_IMAGES_URL = "/story/{id}/images";
 
     public static final DecodedJWT getDecodedToken(String token) {
         //#TODO jei bad request tai programa luzta tai not that great
