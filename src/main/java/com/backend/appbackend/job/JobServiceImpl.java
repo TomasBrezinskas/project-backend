@@ -158,6 +158,11 @@ public class JobServiceImpl implements JobService {
         return filteredJobs;
     }
 
+    @Override
+    public Job fetchJobByIdea(String idea) {
+        return jobRepository.findJobByIdea(idea);
+    }
+
     private boolean checkIfJobIsNotActive(Job job) {
         Date date = new Date();
 

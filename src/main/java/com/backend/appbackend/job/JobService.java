@@ -21,6 +21,8 @@ public interface JobService {
 
     List<Job> fetchNotActiveJobs();
 
+    Job fetchJobByIdea(String idea) throws JobNotFoundException;
+
     void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException;
 
     void cancelParticipant(String token, String id) throws UserException, JobNotFoundException;
