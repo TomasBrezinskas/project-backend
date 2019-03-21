@@ -1,6 +1,5 @@
 package com.backend.appbackend.user;
 
-import com.backend.appbackend.job.Job;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import javax.persistence.Column;
@@ -8,6 +7,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -38,6 +38,7 @@ public class User {
 
     public User() {
         this.role = "user";
+        this.attendedJobs = new ArrayList<>();
     }
 
     public List<String> getAttendedJobs() {
