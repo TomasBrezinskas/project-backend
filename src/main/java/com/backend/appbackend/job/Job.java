@@ -57,7 +57,6 @@ public class Job {
     @Size(max = 512, message = "Max length for field: \"Description\" is 512")
     private String description;
 
-    private List<String> hashtags;
 
     private User organizator;
 
@@ -190,13 +189,5 @@ public class Job {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<String> getHashtags() {
-        return hashtags;
-    }
-
-    public void setHashtags(List<String> hashtags) {
-        this.hashtags = hashtags;
     }
 }
