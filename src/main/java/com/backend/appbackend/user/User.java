@@ -36,6 +36,10 @@ public class User {
 
     private List<String> attendedJobs;
 
+    public User() {
+        this.role = "user";
+    }
+
     public List<String> getAttendedJobs() {
         return attendedJobs;
     }
