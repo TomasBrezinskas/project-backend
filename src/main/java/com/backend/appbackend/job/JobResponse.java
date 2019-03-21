@@ -1,72 +1,51 @@
 package com.backend.appbackend.job;
 
 import com.backend.appbackend.user.User;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.List;
 
-@Document
-public class Job {
-
-    @Id
-    @GeneratedValue
+public class JobResponse {
     private String id;
-
-    @NotBlank
     private String date;
-
-    @NotBlank
-    @Column(unique = true)
-    @Size(max = 64, message = "Max length for field: \"Idea\" is 64")
     private String idea;
-
-    @NotBlank
-    @Size(max = 64, message = "Max length for field: \"Organisation\" is 64")
     private String organisation;
-
-    @NotBlank
-    @Size(max = 64, message = "Max length for field: \"Region\" is 64")
     private String region;
-
-    @NotBlank
-    @Size(max = 32, message = "Max length for field: \"Category\" is 32")
     private String category;
-
-    @Email
-    @Size(max = 64, message = "Max length for field: \"Email\" is 64")
     private String email;
-
-    @NotBlank
-    @Size(max = 64, message = "Max length for field: \"Contact Name\" is 64")
     private String contactName;
-
-    @Size(max = 32, message = "Max length for field: \"Website\" is 32")
     private String website;
-
-    @NotBlank
-    @Size(max = 12, message = "Max length for field: \"Phone\" is 12")
     private String phone;
-
-    @NotBlank
-    @Size(max = 512, message = "Max length for field: \"Description\" is 512")
     private String description;
-
-
     private User organizator;
-
     private List<User> team;
-
     private boolean approved;
 
     private boolean canceled;
 
-    public boolean getCanceled() {
+    private boolean isUserInTeam = false;
+
+    public JobResponse() {
+    }
+
+    public JobResponse(String id, String date, String idea, String organisation, String region, String category, String email, String contactName, String website, String phone, String description, User organizator, List<User> team, boolean approved, boolean canceled) {
+        this.id = id;
+        this.date = date;
+        this.idea = idea;
+        this.organisation = organisation;
+        this.region = region;
+        this.category = category;
+        this.email = email;
+        this.contactName = contactName;
+        this.website = website;
+        this.phone = phone;
+        this.description = description;
+        this.organizator = organizator;
+        this.team = team;
+        this.approved = approved;
+        this.canceled = canceled;
+    }
+
+    public boolean isCanceled() {
         return canceled;
     }
 
@@ -78,37 +57,16 @@ public class Job {
         return approved;
     }
 
-    public void setApprovedTrue() {
-        this.approved = true;
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
-    public void setTeam(List<User> team) {
-        this.team = team;
+    public boolean getIsUserInTeam() {
+        return isUserInTeam;
     }
 
-    public List<User> getTeam() {
-        return team;
-    }
-
-    public User getOrganizator() {
-        return organizator;
-    }
-
-    public void setOrganizator(User organizator) {
-        this.organizator = organizator;
-    }
-
-    public Job() {
-        this.approved = false;
-        this.canceled = false;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
+    public void setUserInTeamTrue() {
+        this.isUserInTeam = true;
     }
 
     public String getId() {
@@ -117,6 +75,14 @@ public class Job {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getIdea() {
@@ -189,5 +155,21 @@ public class Job {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getOrganizator() {
+        return organizator;
+    }
+
+    public void setOrganizator(User organizator) {
+        this.organizator = organizator;
+    }
+
+    public List<User> getTeam() {
+        return team;
+    }
+
+    public void setTeam(List<User> team) {
+        this.team = team;
     }
 }

@@ -25,6 +25,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByEmail(String email) throws UserException {
+        if (userRepository.findUserByEmail(email) == null) {
+            throw new UserException("User not found in database.");
+        }
+        return userRepository.findUserByEmail(email);
+    }
+
+    @Override
     public void insertUser(User user) {
         userRepository.save(user);
     }

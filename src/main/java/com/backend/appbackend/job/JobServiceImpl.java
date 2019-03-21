@@ -1,24 +1,31 @@
 package com.backend.appbackend.job;
 
+import com.backend.appbackend.user.User;
+import com.backend.appbackend.user.UserException;
+import com.backend.appbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.backend.appbackend.job.JobUtils.DATE_FORMAT;
+import static com.backend.appbackend.security.SecurityUtils.getEmailFromToken;
 
 @Service
 public class JobServiceImpl implements JobService {
 
     private JobRepository jobRepository;
+    private UserService userService;
 
     @Autowired
-    public JobServiceImpl(JobRepository jobRepository) {
+    public JobServiceImpl(JobRepository jobRepository, UserService userService) {
         this.jobRepository = jobRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -27,7 +34,19 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void insertJob(Job job) {
+    public void insertJob(Job job, String token) throws JobIdeaAlreadyExistsException {
+        String email = getEmailFromToken(token);
+        try {
+            User organizator = userService.findUserByEmail(email);
+            organizator.getAttendedJobs().add(job.getIdea());
+            userService.updateUser(organizator);
+            job.setOrganizator(organizator);
+        } catch (UserException ex) {
+            ex.printStackTrace();
+        }
+        if (jobRepository.findJobByIdea(job.getIdea()) != null) {
+            throw new JobIdeaAlreadyExistsException("This Idea already exists in the database.");
+        }
         jobRepository.save(job);
     }
 
@@ -44,8 +63,27 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> fetchFutureJobsSortedByDate() {
-        return filterActiveJobs();
+    public List<Job> fetchNotApprovedJobs() {
+        return filterActiveJobs(false);
+    }
+
+    @Override
+    public List<JobResponse> fetchFutureJobsSortedByDate(String token) {
+        List<JobResponse> jobResponses = convertJob(filterActiveJobs(true));
+
+        if (token != null) {
+            try {
+                String email = getEmailFromToken(token);
+                for (JobResponse jobResponse : jobResponses) {
+                    if (jobResponse.getTeam().contains(userService.findUserByEmail(email)) || jobResponse.getOrganizator().equals(userService.findUserByEmail(email))) {
+                        jobResponse.setUserInTeamTrue();
+                    }
+                }
+            } catch (UserException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return jobResponses;
     }
 
     @Override
@@ -53,18 +91,105 @@ public class JobServiceImpl implements JobService {
         return jobRepository.findAll();
     }
 
-    private List<Job> filterActiveJobs() {
+    public List<Job> fetchNotActiveJobs() {
+        return getFilteredNotActiveJobs(jobRepository.findAll());
+    }
+
+    @Override
+    public void insertParticipant(String token, String id) throws UserException, JobNotFoundException, TeamIsFullException {
+        String email = getEmailFromToken(token);
+        Job job = getJob(id);
+        if (job.getTeam().contains(userService.findUserByEmail(email))) {
+            throw new UserException("User is already participating in this job.");
+        }
+        if (job.getOrganizator().getEmail().equals(email)) {
+            throw new UserException("User is organizing this job already.");
+        }
+        if (job.getTeam().size() >= 14) {
+            throw new TeamIsFullException("Team is full");
+        }
+        User user = userService.findUserByEmail(email);
+        user.getAttendedJobs().add(job.getIdea());
+        userService.updateUser(user);
+        job.getTeam().add(user);
+        updateJob(job);
+    }
+
+    @Override
+    public void cancelParticipant(String token, String id) throws UserException, JobNotFoundException {
+        String email = getEmailFromToken(token);
+        Job job = getJob(id);
+        if (!(job.getTeam().contains(userService.findUserByEmail(email)))) {
+            throw new UserException("User is not participating in this job.");
+        }
+        if (job.getOrganizator().getEmail().equals(email)) {
+            throw new UserException("User cannot cancel as he is organizing this job.");
+        }
+        User user = userService.findUserByEmail(email);
+        user.getAttendedJobs().remove(job.getIdea());
+        userService.updateUser(user);
+        job.getTeam().remove(user);
+        updateJob(job);
+    }
+
+    @Override
+    public void approveJob(String id) throws JobNotFoundException {
+        Job job = getJob(id);
+        job.setApprovedTrue();
+        updateJob(job);
+    }
+
+    @Override
+    public void cancelJob(String id) throws JobNotFoundException {
+        Job job = getJob(id);
+        job.setCanceledTrue();
+        updateJob(job);
+    }
+
+    @Override
+    public List<String> fetchUsersNotActiveJobs(String token) throws UserException {
+        String email = getEmailFromToken(token);
+        User user = userService.findUserByEmail(email);
+        List<String> filteredJobs = new ArrayList<>();
+        for (String idea: user.getAttendedJobs()){
+            if(checkIfJobIsNotActive(jobRepository.findJobByIdea(idea))) {
+                filteredJobs.add(idea);
+            }
+        }
+        return filteredJobs;
+    }
+
+    @Override
+    public Job fetchJobByIdea(String idea) {
+        return jobRepository.findJobByIdea(idea);
+    }
+
+    private boolean checkIfJobIsNotActive(Job job) {
+        Date date = new Date();
+
+        Date jobDate;
+        try {
+            jobDate = DATE_FORMAT.parse(job.getDate());
+            if (jobDate.before(date) && !job.getCanceled()) {
+                return true;
+            }
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    private List<Job> filterActiveJobs(boolean status) {
         List<Job> sortedJobs = sortJobsByDate();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         Date jobDate;
 
         List<Job> filteredActiveJobs = new ArrayList<>();
-        for (int i = 0; i < sortedJobs.size(); i++) {
+        for (Job sortedJob : sortedJobs) {
             try {
-                jobDate = dateFormat.parse(sortedJobs.get(i).getDate());
-                if (jobDate.after(date) || jobDate.equals(date)) {
-                    filteredActiveJobs.add(sortedJobs.get(i));
+                jobDate = DATE_FORMAT.parse(sortedJob.getDate());
+                if ((jobDate.after(date) || jobDate.equals(date)) && sortedJob.getApproved() == status && !sortedJob.getCanceled()) {
+                    filteredActiveJobs.add(sortedJob);
                 }
             } catch (ParseException ex) {
                 ex.printStackTrace();
@@ -73,8 +198,52 @@ public class JobServiceImpl implements JobService {
         return filteredActiveJobs;
     }
 
+    private List<Job> getFilteredNotActiveJobs(List<Job> jobs) {
+        Date date = new Date();
+        Date jobDate;
+
+        List<Job> filteredNotActiveJobs = new ArrayList<>();
+
+        for (Job job : jobs) {
+            try {
+                jobDate = DATE_FORMAT.parse(job.getDate());
+                if (jobDate.before(date) && !job.getCanceled()) {
+                    filteredNotActiveJobs.add(job);
+                }
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return filteredNotActiveJobs;
+    }
+
     private List<Job> sortJobsByDate() {
         Sort sort = new Sort(Sort.Direction.ASC, "date");
         return jobRepository.findAll(sort);
+    }
+
+    private List<JobResponse> convertJob(List<Job> jobs) {
+        List<JobResponse> jobResponses = new ArrayList<>();
+        for (Job job : jobs) {
+            JobResponse jobResponse = new JobResponse(
+                    job.getId(),
+                    job.getDate(),
+                    job.getIdea(),
+                    job.getOrganisation(),
+                    job.getRegion(),
+                    job.getCategory(),
+                    job.getEmail(),
+                    job.getContactName(),
+                    job.getWebsite(),
+                    job.getPhone(),
+                    job.getDescription(),
+                    job.getOrganizator(),
+                    job.getTeam(),
+                    job.getApproved(),
+                    job.getCanceled()
+            );
+            jobResponses.add(jobResponse);
+        }
+        return jobResponses;
     }
 }

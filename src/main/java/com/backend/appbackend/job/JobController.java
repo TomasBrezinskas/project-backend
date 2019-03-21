@@ -1,5 +1,6 @@
 package com.backend.appbackend.job;
 
+import com.backend.appbackend.user.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,12 @@ public class JobController {
     }
 
     @PostMapping(value = "/job")
-    public ResponseEntity<Object> insertJob(@Valid @RequestBody Job job) {
-        jobService.insertJob(job);
+    public ResponseEntity<Object> insertJob(@RequestHeader("Authorization") String token, @Valid @RequestBody Job job) {
+        try {
+            jobService.insertJob(job, token);
+        } catch (JobIdeaAlreadyExistsException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(job.getId()).toUri();
         return ResponseEntity.created(location).build();
@@ -59,12 +64,68 @@ public class JobController {
     }
 
     @RequestMapping(value = "/jobs/all")
-    public List<Job> fetchActiveSortedJobs() {
-        return jobService.fetchFutureJobsSortedByDate();
+    public List<JobResponse> fetchActiveSortedJobs(@RequestHeader(value = "Authorization", required = false) String token) {
+        return jobService.fetchFutureJobsSortedByDate(token);
     }
 
     @RequestMapping(value = "/jobs/allnosort")
     public List<Job> fetchAllJobs() {
         return jobService.fetchAllJobs();
+    }
+
+    @RequestMapping(value = "/jobs/notactive")
+    public List<Job> fetchNotActiveJobs() {
+        return jobService.fetchNotActiveJobs();
+    }
+
+    @PostMapping(value = "/job/join")
+    public void insertParticipant(@RequestHeader("Authorization") String token, @RequestBody String id) {
+        try {
+            jobService.insertParticipant(token, id);
+        } catch (TeamIsFullException | JobNotFoundException | UserException | ArrayIndexOutOfBoundsException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/job/leave")
+    public void cancelParticipant(@RequestHeader("Authorization") String token, @RequestBody String id) {
+        try {
+            jobService.cancelParticipant(token, id);
+        } catch (JobNotFoundException | UserException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/jobs/admin")
+    public List<Job> fetchNotApprovedJobs() {
+        return jobService.fetchNotApprovedJobs();
+    }
+
+    @PostMapping(value = "/job/admin/approve/{id}")
+    public void approveJob(@PathVariable String id) {
+        try {
+            jobService.approveJob(id);
+        } catch (JobNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/job/admin/cancel/{id}")
+    public void cancelJob(@PathVariable String id) {
+        try {
+            jobService.cancelJob(id);
+        } catch (JobNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+
+    }
+
+    @GetMapping(value = "/story/jobs")
+    public List<String> fetchUsersNotActiveJobs(@RequestHeader("Authorization") String token) {
+        try {
+            return jobService.fetchUsersNotActiveJobs(token);
+        } catch (UserException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 }

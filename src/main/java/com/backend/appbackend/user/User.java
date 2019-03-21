@@ -1,10 +1,14 @@
 package com.backend.appbackend.user;
 
+import com.backend.appbackend.job.Job;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class User {
 
@@ -21,16 +25,36 @@ public class User {
 
     @Email
     @Column(unique = true)
-    @Size(max = 64, message = "Max length for field: \"Email\" is 64")
+    @Size(max = 128, message = "Max length for field: \"Email\" is 128")
     private String email;
-
-    @NotBlank
-    @Size(max = 64, message = "Max length for field: \"Region\" is 64")
-    private String region;
 
     @NotBlank
     @Size(min = 7, message = "Min length for field: \"Password\" is 7")
     private String password;
+
+    private String role;
+
+    private List<String> attendedJobs;
+
+    public User() {
+        this.role = "user";
+    }
+
+    public List<String> getAttendedJobs() {
+        return attendedJobs;
+    }
+
+    public void setAttendedJobs(List<String> attendedJobs) {
+        this.attendedJobs = attendedJobs;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getId() {
         return id;
@@ -38,9 +62,6 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public User() {
     }
 
     public String getName() {
@@ -60,19 +81,11 @@ public class User {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
     }
 
     public String getPassword() {
@@ -81,5 +94,25 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return new EqualsBuilder()
+                .append(id, user.id)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new org.apache.commons.lang3.builder.HashCodeBuilder(17, 37)
+                .append(id)
+                .toHashCode();
     }
 }
